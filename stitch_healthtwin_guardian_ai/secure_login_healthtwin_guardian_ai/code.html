@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Secure Login | HealthTwin Guardian AI</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .mesh-gradient {
+            background-color: #080b11;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(20, 184, 166, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(239, 68, 68, 0.08) 0px, transparent 50%);
+        }
+        .glass-panel {
+            background: rgba(13, 20, 35, 0.65);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+        .scan-anim {
+            animation: scanLine 2s linear infinite;
+        }
+        @keyframes scanLine {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        .input-glow:focus {
+            box-shadow: 0 0 15px rgba(20, 184, 166, 0.25);
+            border-color: #14b8a6;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#14b8a6",
+                        secondary: "#3b82f6",
+                        darkBg: "#080b11",
+                        cardBg: "#0d1423",
+                        accentRed: "#ef4444"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="mesh-gradient text-slate-100 min-h-screen flex flex-col justify-between overflow-x-hidden relative">
+
+    <!-- Glowing Orbs in Background -->
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <!-- Top Navigation Header -->
+    <header class="w-full h-20 px-6 lg:px-12 flex justify-between items-center z-10 border-b border-white/5 bg-darkBg/30 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/20">
+                <span class="material-symbols-outlined text-white text-2xl" style="font-variation-settings: 'FILL' 1;">shield_heart</span>
+            </div>
+            <div>
+                <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">HealthTwin</span>
+                <span class="text-xs font-mono block text-primary font-semibold tracking-wider">GUARDIAN AI</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="text-xs font-mono text-slate-400 border border-white/10 rounded-full px-3 py-1 flex items-center gap-1.5 bg-white/5">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> HIPAA SECURED
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow flex items-center justify-center px-4 py-12 z-10">
+        <div class="w-full max-w-[460px]">
+            <!-- Login Card -->
+            <div class="glass-panel rounded-2xl p-8 lg:p-10 relative overflow-hidden">
+                
+                <!-- Scanner Overlay (Triggered by Bio Auth) -->
+                <div id="bio-scanner" class="absolute inset-0 bg-darkBg/95 z-50 flex flex-col items-center justify-center opacity-0 pointer-events-none transition-all duration-300">
+                    <div class="relative w-48 h-48 rounded-full border-2 border-primary/20 flex items-center justify-center overflow-hidden mb-6">
+                        <!-- Biometric Scanning HUD -->
+                        <span class="material-symbols-outlined text-7xl text-primary animate-pulse">face</span>
+                        <div class="absolute inset-x-0 h-0.5 bg-primary scan-anim"></div>
+                        <div class="absolute inset-0 border border-primary/30 rounded-full scale-95 animate-ping" style="animation-duration: 3s;"></div>
+                    </div>
+                    <h3 class="text-lg font-semibold tracking-tight text-white mb-1">FaceID Synchronization</h3>
+                    <p class="text-sm text-slate-400 font-mono" id="scan-status">Verifying clinical credentials...</p>
+                    <div class="w-32 bg-white/5 h-1 rounded-full overflow-hidden mt-4">
+                        <div class="bg-primary h-full w-0 transition-all duration-1500 ease-out" id="scan-progress"></div>
+                    </div>
+                </div>
+
+                <!-- Card Header -->
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl lg:text-3xl font-bold tracking-tight text-white">Vigilance Portal</h2>
+                    <p class="text-slate-400 text-sm mt-2">Enter your secure keys to access the HealthTwin clinical core.</p>
+                </div>
+
+                <!-- Form -->
+                <form class="space-y-5" onsubmit="handleLogin(event)">
+                    <div>
+                        <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-2" for="clinical-id">Clinical Email / ID</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xl">alternate_email</span>
+                            <input id="clinical-id" class="w-full bg-slate-900/50 border border-white/10 rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none input-glow transition-all" placeholder="practitioner@healthtwin.ai" required="" type="email" value="doctor.twin@guardian.ai"/>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider" for="password">Security Password</label>
+                            <a class="text-xs text-primary hover:underline" href="#">Forgot Password?</a>
+                        </div>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xl">lock_open</span>
+                            <input id="password" class="w-full bg-slate-900/50 border border-white/10 rounded-xl py-3 pl-11 pr-12 text-sm text-white placeholder-slate-500 focus:outline-none input-glow transition-all" placeholder="••••••••••••" required="" type="password" value="GuardianSecure2026"/>
+                            <button type="button" onclick="togglePassword()" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors">
+                                <span id="pwd-icon" class="material-symbols-outlined text-xl">visibility</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between py-1">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked class="rounded bg-slate-900/80 border-white/10 text-primary focus:ring-0 focus:ring-offset-0 w-4.5 h-4.5"/>
+                            <span class="text-xs text-slate-300 select-none">Remember security session</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/95 hover:to-primary/75 text-slate-950 font-semibold rounded-xl text-sm shadow-lg shadow-primary/10 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">login</span>
+                        Authenticate & Continue
+                    </button>
+                </form>
+
+                <!-- Divider -->
+                <div class="relative my-6 flex items-center justify-center">
+                    <div class="absolute inset-x-0 h-px bg-white/5"></div>
+                    <span class="relative px-3 bg-[#0d1423] text-xs font-mono text-slate-500 uppercase tracking-widest">or biometric auth</span>
+                </div>
+
+                <!-- Biometric Login Button -->
+                <button type="button" onclick="triggerBiometric()" class="w-full py-3 bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-3">
+                    <span class="material-symbols-outlined text-xl text-primary">fingerprint</span>
+                    <span>Authenticate via Face / Touch ID</span>
+                </button>
+            </div>
+
+            <!-- Demo Guide -->
+            <div class="mt-6 text-center">
+                <p class="text-xs text-slate-500">
+                    Hackathon Demo Account loaded. Click "Authenticate" or "Biometric Auth" to trigger clinical onboarding.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-6 text-center border-t border-white/5 bg-darkBg/30 backdrop-blur-md">
+        <p class="text-xs text-slate-500 font-mono">
+            © 2026 HealthTwin Guardian AI Inc. Security Cryptography Core v2.4.1. HIPAA & GDPR Compliant.
+        </p>
+    </footer>
+
+    <script>
+        function togglePassword() {
+            const pwdInput = document.getElementById('password');
+            const icon = document.getElementById('pwd-icon');
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                pwdInput.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            // Route to dashboard after login
+            window.location.href = "../interactive_ai_health_twin_dashboard/code.html";
+        }
+
+        function triggerBiometric() {
+            const scanner = document.getElementById('bio-scanner');
+            const status = document.getElementById('scan-status');
+            const progress = document.getElementById('scan-progress');
+            
+            scanner.classList.remove('opacity-0', 'pointer-events-none');
+            
+            setTimeout(() => {
+                progress.style.width = '40%';
+                status.textContent = 'Scanning facial mapping points...';
+            }, 300);
+
+            setTimeout(() => {
+                progress.style.width = '75%';
+                status.textContent = 'Verifying signature keys...';
+            }, 900);
+
+            setTimeout(() => {
+                progress.style.width = '100%';
+                status.textContent = 'Access Granted. Redirecting...';
+            }, 1500);
+
+            setTimeout(() => {
+                window.location.href = "../interactive_ai_health_twin_dashboard/code.html";
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

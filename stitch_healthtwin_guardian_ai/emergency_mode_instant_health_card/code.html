@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Emergency Medical SOS Card | HealthTwin Guardian AI</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .emergency-glow {
+            background-color: #0b0202;
+            background-image: 
+                radial-gradient(at 50% 0%, rgba(239, 68, 68, 0.2) 0px, transparent 60%),
+                radial-gradient(at 0% 100%, rgba(15, 23, 42, 0.8) 0px, transparent 50%);
+        }
+        .red-glass {
+            background: rgba(45, 10, 10, 0.65);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+        }
+        .pulse-ring {
+            animation: pulseRing 1.5s cubic-bezier(0.215, 0.610, 0.355, 1) infinite;
+        }
+        @keyframes pulseRing {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { opacity: 0.4; }
+            100% { transform: scale(1.15); opacity: 0; }
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#ef4444", // Emergency Red
+                        secondary: "#10b981", // Life Teal
+                        darkBg: "#0b0202"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="emergency-glow text-slate-100 min-h-screen flex flex-col justify-between overflow-x-hidden relative">
+
+    <!-- Glowing top alert bar -->
+    <div class="w-full bg-primary text-slate-950 py-2 px-4 text-center text-xs font-mono font-extrabold tracking-widest animate-pulse flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">emergency</span>
+        CRITICAL VITAL TELEMETRY BYPASS PROTOCOL ACTIVE
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="w-full h-16 px-6 flex justify-between items-center z-10 border-b border-primary/20 bg-darkBg/40 backdrop-blur-md">
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">shield_heart</span>
+            <span class="font-extrabold text-sm tracking-tight text-white font-mono">GUARDIAN SOS</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <a class="text-xs font-mono text-slate-400 hover:text-white transition-colors" href="../interactive_ai_health_twin_dashboard/code.html">Dashboard Core</a>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="flex-grow flex items-center justify-center px-4 py-8 z-10">
+        <div class="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Left Side: Vital Card Detail (Paramedic-First layout) -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="red-glass rounded-2xl p-6 lg:p-8 space-y-6">
+                    <div class="flex justify-between items-start border-b border-primary/20 pb-4">
+                        <div>
+                            <span class="text-[10px] font-mono text-slate-400 block uppercase">Identity Verified</span>
+                            <h2 class="text-2xl font-black tracking-tight text-white">Johnathan Doe</h2>
+                            <span class="text-xs text-slate-400 font-mono">DOB: 1984-10-12 (Age 42)</span>
+                        </div>
+                        
+                        <!-- Large Blood Indicator -->
+                        <div class="text-right">
+                            <span class="text-[9px] font-mono text-primary font-bold uppercase tracking-widest block">Blood Type</span>
+                            <span class="text-4xl font-black text-primary drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">O+</span>
+                        </div>
+                    </div>
+
+                    <!-- Bento clinical summaries -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-black/40 border border-primary/10 p-4 rounded-xl">
+                            <span class="text-[9px] font-mono text-primary font-bold uppercase tracking-wider block mb-1">Severe Allergies</span>
+                            <p class="text-sm font-semibold text-white leading-relaxed">Penicillin, Peanuts, Sulfa Drugs</p>
+                        </div>
+                        
+                        <div class="bg-black/40 border border-primary/10 p-4 rounded-xl">
+                            <span class="text-[9px] font-mono text-primary font-bold uppercase tracking-wider block mb-1">Chronic Conditions</span>
+                            <p class="text-sm font-semibold text-white leading-relaxed">Hypertension, Pre-Diabetes</p>
+                        </div>
+                    </div>
+
+                    <!-- Medication list -->
+                    <div class="bg-black/40 border border-primary/10 p-5 rounded-xl space-y-3">
+                        <span class="text-[9px] font-mono text-primary font-bold uppercase tracking-wider block">Active Medications</span>
+                        <ul class="space-y-2 text-xs font-mono">
+                            <li class="flex justify-between text-slate-300">
+                                <span>1. Lisinopril (ACE Inhibitor)</span>
+                                <span class="text-white">10mg daily</span>
+                            </li>
+                            <li class="flex justify-between text-slate-300">
+                                <span>2. Metformin (Antidiabetic)</span>
+                                <span class="text-white">500mg daily</span>
+                            </li>
+                            <li class="flex justify-between text-slate-300">
+                                <span>3. Vitamin D3 (Supplement)</span>
+                                <span class="text-white">2000 IU daily</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Emergency contacts -->
+                    <div class="bg-black/40 border border-primary/10 p-5 rounded-xl space-y-3">
+                        <span class="text-[9px] font-mono text-primary font-bold uppercase tracking-wider block">Emergency Contacts</span>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                            <div>
+                                <span class="text-slate-400 block font-mono">Spouse / Primary:</span>
+                                <span class="font-bold text-white block mt-0.5">Jane Doe</span>
+                                <a class="text-primary hover:underline font-mono text-[11px]" href="tel:+15550199">+1-555-0199</a>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 block font-mono">Clinical Cardiologist:</span>
+                                <span class="font-bold text-white block mt-0.5">Dr. Robert Mercer</span>
+                                <a class="text-primary hover:underline font-mono text-[11px]" href="tel:+15550144">+1-555-0144</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: QR Code, PDF Download & Share -->
+            <div class="lg:col-span-5 space-y-6">
+                <!-- QR Card Panel -->
+                <div class="red-glass rounded-2xl p-8 flex flex-col items-center justify-center text-center relative overflow-hidden group">
+                    <div class="absolute top-4 right-4">
+                        <span class="bg-primary/20 text-primary border border-primary/30 font-mono text-[9px] px-2.5 py-0.5 rounded-full font-bold">HIPAA SECURED</span>
+                    </div>
+
+                    <div class="relative p-3 bg-white rounded-xl shadow-lg mb-6">
+                        <div class="absolute inset-0 border-2 border-dashed border-primary/20 rounded-xl"></div>
+                        <img alt="Emergency QR Code" class="w-44 h-44 grayscale relative z-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxCbUX3kJtIyW8gvRv95itMS611h7zI-cMG-y2FiuYyZPvL0fs_D8lPjQEP_6E_gcSYHNLjbVk-9QL5o0mnScWkavZo3R36Zgn1aIc20ju7Zh1PJj3yBazrydcKNkxMXcTDeUMd6VOaTji_QGOsoHI0jubZLkE0bOY7acRFneaqS2hYqXcQ2rvoNECcbfMQhGDVbgw1yS20aQS2_nl9AUsjAywwL9LsKRmTKtEtLd5jkacRbbDL-9_Jk0dDovOdhpqfFf1yELY5w"/>
+                    </div>
+
+                    <h3 class="text-base font-bold text-white font-mono uppercase tracking-wider mb-2">Scan for Clinical Full Record</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed max-w-xs mb-6">
+                        Responding paramedics scan this QR code to access John Doe's deep medical history and digital twin telemetry safely.
+                    </p>
+
+                    <!-- PDF / Print buttons -->
+                    <div class="w-full flex gap-3">
+                        <button onclick="window.print()" class="flex-1 py-3 bg-primary hover:bg-primary/95 text-white font-semibold rounded-xl text-xs shadow-lg shadow-primary/10 transition-all flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-base">picture_as_pdf</span>
+                            Print SOS PDF
+                        </button>
+                        <button class="flex-1 py-3 bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200 font-semibold rounded-xl text-xs transition-all flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-base">share</span>
+                            Share SOS link
+                        </button>
+                    </div>
+                </div>
+
+                <!-- System warning disclaimer -->
+                <div class="bg-black/30 border border-white/5 p-4 rounded-xl text-[10px] text-slate-500 font-mono text-center">
+                    Cryptographic signature: SECURE-BYPASS-VALIDATED-2026. Paramedic core compliance approved by HIPAA.
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-6 text-center border-t border-primary/20 bg-darkBg/40 backdrop-blur-md">
+        <p class="text-[10px] text-slate-500 font-mono">
+            © 2026 HealthTwin Guardian AI Inc. Security Cryptography SOS core. Protected under global biosecurity policies.
+        </p>
+    </footer>
+
+</body>
+</html>

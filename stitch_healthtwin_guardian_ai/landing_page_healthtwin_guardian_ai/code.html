@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>HealthTwin Guardian AI - Your AI Health Twin</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .mesh-gradient {
+            background-color: #060913;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(20, 184, 166, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(239, 68, 68, 0.08) 0px, transparent 50%);
+        }
+        .glass-panel {
+            background: rgba(13, 20, 35, 0.65);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-panel-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-panel-hover:hover {
+            background: rgba(13, 20, 35, 0.85);
+            border-color: rgba(20, 184, 166, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(20, 184, 166, 0.2);
+            transform: translateY(-2px);
+        }
+        .health-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .6; transform: scale(1.08); }
+        }
+        .agent-node {
+            animation: floatNode 6s ease-in-out infinite;
+        }
+        @keyframes floatNode {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-8px) scale(1.02); }
+        }
+        .perspective-card {
+            transform: perspective(1000px) rotateX(12deg) rotateY(-8deg) rotateZ(2deg);
+            transition: transform 0.5s ease;
+        }
+        .perspective-card:hover {
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#14b8a6", // Life Teal
+                        secondary: "#3b82f6", // Digital Blue
+                        darkBg: "#060913",
+                        cardBg: "#0d1423",
+                        accentRed: "#ef4444" // Emergency Red
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="mesh-gradient text-slate-100 min-h-screen overflow-x-hidden">
+
+    <!-- Top Navigation Header -->
+    <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 lg:px-12 h-20 bg-darkBg/60 backdrop-blur-xl border-b border-white/5 shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/20">
+                <span class="material-symbols-outlined text-white text-2xl" style="font-variation-settings: 'FILL' 1;">shield_heart</span>
+            </div>
+            <div>
+                <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">HealthTwin</span>
+                <span class="text-xs font-mono block text-primary font-semibold tracking-wider">GUARDIAN AI</span>
+            </div>
+        </div>
+        <nav class="hidden md:flex items-center gap-8">
+            <a class="text-slate-300 hover:text-primary transition-colors text-sm font-medium" href="#features">Features</a>
+            <a class="text-slate-300 hover:text-primary transition-colors text-sm font-medium" href="#swarm">AI Swarm</a>
+            <a class="text-slate-300 hover:text-primary transition-colors text-sm font-medium" href="#scanner">Scanner</a>
+            <a class="text-slate-300 hover:text-primary transition-colors text-sm font-medium" href="#pricing">Pricing</a>
+        </nav>
+        <div class="flex items-center gap-4">
+            <a class="text-slate-300 hover:text-white transition-colors text-sm font-medium px-4 py-2" href="../secure_login_healthtwin_guardian_ai/code.html">Sign In</a>
+            <a class="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/95 hover:to-primary/75 text-slate-950 font-semibold rounded-xl text-sm px-5 py-2.5 shadow-lg shadow-primary/10 transition-all hover:scale-[1.02] active:scale-[0.98]" href="../interactive_ai_health_twin_dashboard/code.html">Launch App</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-6 lg:px-12 max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative">
+        <div class="lg:col-span-6 flex flex-col gap-6 z-10">
+            <span class="bg-primary/10 border border-primary/20 text-primary px-4 py-1.5 rounded-full font-mono text-xs font-semibold tracking-wider self-start flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-primary health-pulse"></span> HACKATHON WINNER PREVIEW
+            </span>
+            <h1 class="text-4xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
+                Your AI <br/>
+                <span class="bg-gradient-to-r from-primary via-emerald-400 to-secondary bg-clip-text text-transparent">Health Twin</span>
+            </h1>
+            <p class="text-slate-400 text-lg leading-relaxed max-w-lg">
+                HealthTwin Guardian AI syncs with your biometrics, analyzes complex medical documentation in real-time, and generates a paramedic-ready health card during critical moments.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 mt-2">
+                <a class="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/95 hover:to-primary/75 text-slate-950 font-semibold rounded-xl text-base px-6 py-3.5 shadow-lg shadow-primary/10 transition-all hover:scale-[1.02] active:scale-[0.98] text-center flex items-center justify-center gap-2" href="../interactive_ai_health_twin_dashboard/code.html">
+                    Get Started Free
+                    <span class="material-symbols-outlined text-xl">arrow_forward</span>
+                </a>
+                <a class="bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200 font-semibold rounded-xl text-base px-6 py-3.5 transition-all text-center flex items-center justify-center gap-2" href="../secure_login_healthtwin_guardian_ai/code.html">
+                    <span class="material-symbols-outlined text-xl">verified_user</span>
+                    Clinical Security Sign-In
+                </a>
+            </div>
+            <!-- Animated Metrics row -->
+            <div class="grid grid-cols-3 gap-6 border-t border-white/5 pt-8 mt-4 font-mono">
+                <div>
+                    <span class="text-2xl lg:text-3xl font-bold text-white block">98.4%</span>
+                    <span class="text-xs text-slate-500">Twin Synchronization</span>
+                </div>
+                <div>
+                    <span class="text-2xl lg:text-3xl font-bold text-white block">&lt; 3.0s</span>
+                    <span class="text-xs text-slate-500">SOS Retrieval</span>
+                </div>
+                <div>
+                    <span class="text-2xl lg:text-3xl font-bold text-white block">24/7</span>
+                    <span class="text-xs text-slate-500">Active Vigilance</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero 3D Dashboard Preview Mockup -->
+        <div class="lg:col-span-6 flex justify-center z-10">
+            <div class="w-full max-w-[500px] perspective-card glass-panel rounded-2xl p-6 shadow-2xl relative">
+                <!-- Floating Mini widgets -->
+                <div class="absolute -top-6 -right-6 bg-slate-900 border border-white/10 rounded-xl p-3.5 shadow-xl flex items-center gap-3 animate-bounce" style="animation-duration: 4s;">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-emerald-400">favorite</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-400 font-mono">HEART RATE</span>
+                        <span class="text-sm font-bold text-white block">72 BPM</span>
+                    </div>
+                </div>
+
+                <div class="absolute -bottom-6 -left-6 bg-slate-900 border border-white/10 rounded-xl p-3.5 shadow-xl flex items-center gap-3 animate-bounce" style="animation-duration: 5s;">
+                    <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">health_metrics</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-400 font-mono font-medium">HEALTH INDEX</span>
+                        <span class="text-sm font-bold text-primary block">94 / 100</span>
+                    </div>
+                </div>
+
+                <!-- Main dashboard visual -->
+                <div class="flex justify-between items-center border-b border-white/5 pb-4 mb-4">
+                    <span class="text-sm font-semibold tracking-wide text-white">Digital Health Twin Portal</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></span>
+                </div>
+                
+                <!-- SVG body representation inside mockup -->
+                <div class="h-64 flex items-center justify-center relative overflow-hidden bg-slate-950/50 rounded-xl border border-white/5">
+                    <div class="absolute inset-0 bg-radial-gradient opacity-10"></div>
+                    <!-- Body Outline Mock -->
+                    <span class="material-symbols-outlined text-[180px] text-primary/15">accessibility_new</span>
+                    
+                    <!-- Pulsing hotspots -->
+                    <div class="absolute top-[25%] left-[50%] -translate-x-1/2">
+                        <div class="w-3.5 h-3.5 bg-emerald-500 rounded-full health-pulse shadow-[0_0_10px_#10b981]"></div>
+                    </div>
+                    <div class="absolute top-[38%] left-[46%]">
+                        <div class="w-3.5 h-3.5 bg-yellow-500 rounded-full health-pulse shadow-[0_0_10px_#f59e0b]"></div>
+                    </div>
+                    <div class="absolute top-[55%] left-[54%]">
+                        <div class="w-3.5 h-3.5 bg-primary rounded-full health-pulse shadow-[0_0_10px_#14b8a6]"></div>
+                    </div>
+                </div>
+
+                <div class="mt-4 grid grid-cols-2 gap-4">
+                    <div class="bg-white/5 border border-white/5 p-3 rounded-xl">
+                        <span class="text-[10px] font-mono text-slate-500 block uppercase">Cardiac Load</span>
+                        <span class="text-sm font-bold text-white">Optimal Vitals</span>
+                    </div>
+                    <div class="bg-white/5 border border-white/5 p-3 rounded-xl">
+                        <span class="text-[10px] font-mono text-slate-500 block uppercase">Prediction Swarm</span>
+                        <span class="text-sm font-bold text-primary">Vigilance Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Bento Section -->
+    <section id="features" class="py-20 px-6 lg:px-12 max-w-[1440px] mx-auto w-full">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-white">Proactive Health Intelligence</h2>
+            <p class="text-slate-400 mt-3">Advanced components designed to save lives, clarify data, and predict biometric anomalies.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <div class="glass-panel glass-panel-hover rounded-2xl p-6 flex flex-col justify-between min-h-[260px]">
+                <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6">
+                    <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">genetics</span>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">Digital Twin Synchronization</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Creates a living biological duplicate referencing genetics, vitals, and reports to forecast stress spikes.</p>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="glass-panel glass-panel-hover rounded-2xl p-6 flex flex-col justify-between min-h-[260px]">
+                <div class="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary mb-6">
+                    <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">hub</span>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">AI Agent Swarm</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Multi-agent network routing tasks asynchronously to check drug risks, decode lab reports, and verify heart status.</p>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="glass-panel glass-panel-hover rounded-2xl p-6 flex flex-col justify-between min-h-[260px]">
+                <div class="w-12 h-12 rounded-xl bg-accentRed/10 flex items-center justify-center text-accentRed mb-6">
+                    <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">emergency</span>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">Paramedic Emergency Card</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Instantly generated paramedic layout. Scan-ready QR code detailing critical conditions and blood group.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Agent Swarm Section -->
+    <section id="swarm" class="py-20 bg-slate-950/40 border-y border-white/5 px-6 lg:px-12 max-w-[1440px] mx-auto w-full relative">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-5 flex flex-col gap-6">
+                <span class="text-xs text-primary font-mono font-semibold uppercase tracking-widest">Multi-Agent Architecture</span>
+                <h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-white">The Guardian Swarm</h2>
+                <p class="text-slate-400 leading-relaxed">
+                    Instead of a single AI, HealthTwin employs an active hive of specialized sub-agents working together in the background to monitor, translate, and cross-reference records.
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        <span class="text-sm font-medium text-slate-200">🩸 Blood Agent: Checks key hematology bounds</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        <span class="text-sm font-medium text-slate-200">💊 Medication Agent: Evaluates drug-to-drug interactions</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        <span class="text-sm font-medium text-slate-200">❤️ Cardiac Agent: Scans vital metrics patterns</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Glowing nodes visualization -->
+            <div class="lg:col-span-7 flex justify-center relative min-h-[400px]">
+                <div class="absolute inset-0 bg-radial-gradient opacity-10"></div>
+                <!-- Network Grid Visual Simulation -->
+                <div class="relative w-full max-w-[500px] h-[350px] border border-white/5 rounded-2xl bg-slate-900/60 p-6 flex flex-col justify-between overflow-hidden">
+                    <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#14b8a6 1px, transparent 1px); background-size: 16px 16px;"></div>
+                    
+                    <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                        <span class="text-xs font-mono text-slate-400">ACTIVE AI ORCHESTRATION</span>
+                        <span class="text-xs font-mono text-primary flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-primary health-pulse"></span> 7 Agents Active
+                        </span>
+                    </div>
+
+                    <!-- Glowing Agents Core Map -->
+                    <div class="relative flex-grow flex items-center justify-center">
+                        <!-- Connecting SVG lines -->
+                        <svg class="absolute inset-0 w-full h-full pointer-events-none">
+                            <line x1="50%" y1="50%" x2="25%" y2="25%" stroke="rgba(20, 184, 166, 0.3)" stroke-width="1.5" />
+                            <line x1="50%" y1="50%" x2="75%" y2="25%" stroke="rgba(20, 184, 166, 0.3)" stroke-width="1.5" />
+                            <line x1="50%" y1="50%" x2="15%" y2="55%" stroke="rgba(20, 184, 166, 0.3)" stroke-width="1.5" />
+                            <line x1="50%" y1="50%" x2="85%" y2="55%" stroke="rgba(20, 184, 166, 0.3)" stroke-width="1.5" />
+                            <line x1="50%" y1="50%" x2="30%" y2="85%" stroke="rgba(20, 184, 166, 0.3)" stroke-width="1.5" />
+                            <line x1="50%" y1="50%" x2="70%" y2="85%" stroke="rgba(20, 184, 166, 0.3)" stroke-width="1.5" />
+                        </svg>
+
+                        <!-- Central Orchestrator -->
+                        <div class="absolute w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-xl shadow-primary/30 z-10 agent-node">
+                            <span class="material-symbols-outlined text-white text-2xl" style="font-variation-settings: 'FILL' 1;">psychology</span>
+                        </div>
+
+                        <!-- Nodes -->
+                        <div class="absolute top-[15%] left-[20%] w-10 h-10 rounded-lg bg-slate-900 border border-primary/20 flex items-center justify-center shadow-md shadow-primary/5 cursor-pointer">
+                            <span class="text-lg">🩸</span>
+                        </div>
+                        <div class="absolute top-[15%] right-[20%] w-10 h-10 rounded-lg bg-slate-900 border border-primary/20 flex items-center justify-center shadow-md shadow-primary/5 cursor-pointer">
+                            <span class="text-lg">💊</span>
+                        </div>
+                        <div class="absolute top-[48%] left-[8%] w-10 h-10 rounded-lg bg-slate-900 border border-primary/20 flex items-center justify-center shadow-md shadow-primary/5 cursor-pointer">
+                            <span class="text-lg">❤️</span>
+                        </div>
+                        <div class="absolute top-[48%] right-[8%] w-10 h-10 rounded-lg bg-slate-900 border border-primary/20 flex items-center justify-center shadow-md shadow-primary/5 cursor-pointer">
+                            <span class="text-lg">🧠</span>
+                        </div>
+                        <div class="absolute bottom-[10%] left-[25%] w-10 h-10 rounded-lg bg-slate-900 border border-primary/20 flex items-center justify-center shadow-md shadow-primary/5 cursor-pointer">
+                            <span class="text-lg">📄</span>
+                        </div>
+                        <div class="absolute bottom-[10%] right-[25%] w-10 h-10 rounded-lg bg-slate-900 border border-primary/20 flex items-center justify-center shadow-md shadow-primary/5 cursor-pointer">
+                            <span class="text-lg">🌍</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/5 p-3 rounded-xl flex items-center justify-between">
+                        <span class="text-xs font-mono text-slate-400">Medication Agent logged: "Simulating interactions..."</span>
+                        <span class="text-[10px] font-mono text-primary font-bold">12ms ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Medicine Scanner Showcase Section -->
+    <section id="scanner" class="py-20 px-6 lg:px-12 max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="lg:col-span-6 flex justify-center order-2 lg:order-1">
+            <!-- Scanner Mockup Card -->
+            <div class="w-full max-w-[480px] glass-panel rounded-2xl p-6 border-white/10 shadow-xl relative overflow-hidden">
+                <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary to-secondary"></div>
+                
+                <h4 class="font-bold text-white mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">qr_code_scanner</span>
+                    Medicine Image Scanner
+                </h4>
+
+                <!-- Upload / Scan Preview block -->
+                <div class="bg-slate-950/60 rounded-xl p-4 border border-white/5 text-center relative flex flex-col items-center justify-center min-h-[200px] mb-4">
+                    <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-3">
+                        <span class="material-symbols-outlined text-3xl">photo_camera</span>
+                    </div>
+                    <p class="text-sm font-medium text-slate-200">Medicine Scan Ready</p>
+                    <p class="text-xs text-slate-500 mt-1">Upload a prescription or bottle to extract clinical details</p>
+                </div>
+
+                <!-- Detected results mockup -->
+                <div class="bg-white/5 border border-white/5 rounded-xl p-4">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <span class="text-[10px] font-mono text-primary uppercase font-bold tracking-wider">Detected Substance</span>
+                            <h5 class="text-base font-bold text-white">Atorvastatin Calcium</h5>
+                        </div>
+                        <span class="bg-emerald-500/10 text-emerald-400 font-mono text-xs px-2.5 py-0.5 rounded-full font-bold">96% Safety Score</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <span class="text-slate-500 font-mono block">Dosage:</span>
+                            <span class="text-slate-300 font-medium">10mg once daily</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 font-mono block">Purpose:</span>
+                            <span class="text-slate-300 font-medium">Cardiology / Cholesterol</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-6 flex flex-col gap-6 order-1 lg:order-2">
+            <span class="text-xs text-secondary font-mono font-semibold uppercase tracking-widest">Advanced OCR & Safety</span>
+            <h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-white">Instant Prescriptions & Pills Explainer</h2>
+            <p class="text-slate-400 leading-relaxed">
+                Take a photo of any medicine bottle or handwritten prescription. Guardian AI extracts chemical names, confirms correct dosages, and flags hazardous drug-to-drug interactions instantly.
+            </p>
+            <div class="flex gap-4">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-secondary">verified</span>
+                    <span class="text-sm text-slate-300 font-medium">Auto interaction crosscheck</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-secondary">verified</span>
+                    <span class="text-sm text-slate-300 font-medium">Simplified terminology explanations</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20 bg-slate-950/20 border-t border-white/5 px-6 lg:px-12 max-w-[1440px] mx-auto w-full">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-white">Endorsed by Clinical Practitioners</h2>
+            <p class="text-slate-400 mt-2">Hear how digital health twins are shifting medicine from reactive treatments to proactive vigilance.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="glass-panel p-8 rounded-2xl flex flex-col justify-between">
+                <p class="text-slate-300 italic text-base leading-relaxed">
+                    "HealthTwin Guardian AI translates clinical complex data in seconds. The drug interaction checker is a game-changer for preventative health, protecting my patients outside of clinic hours."
+                </p>
+                <div class="flex items-center gap-4 mt-6">
+                    <div class="w-11 h-11 rounded-full bg-slate-800 flex items-center justify-center text-primary font-bold font-mono">DR</div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white">Dr. Sarah Mercer, MD</h4>
+                        <span class="text-xs text-slate-500">Cardiology Specialist</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel p-8 rounded-2xl flex flex-col justify-between">
+                <p class="text-slate-300 italic text-base leading-relaxed">
+                    "The paramedic SOS layout worked instantly when I was out in the field. Having medical histories, blood group, and allergens accessible via a 3-second secure QR scan is phenomenal."
+                </p>
+                <div class="flex items-center gap-4 mt-6">
+                    <div class="w-11 h-11 rounded-full bg-slate-800 flex items-center justify-center text-secondary font-bold font-mono">PM</div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white">Marcus Vance</h4>
+                        <span class="text-xs text-slate-500">Lead Emergency Responder</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 px-6 lg:px-12 max-w-[1440px] mx-auto w-full">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-white">SaaS Pricing System</h2>
+            <p class="text-slate-400 mt-2">Scale secure healthcare monitoring to your entire family.</p>
+            
+            <!-- Toggle pricing -->
+            <div class="flex items-center justify-center gap-3 mt-6">
+                <span id="label-monthly" class="text-sm font-medium text-primary">Monthly Billing</span>
+                <button onclick="toggleBilling()" class="w-12 h-6 bg-primary/20 border border-primary/40 rounded-full p-0.5 relative transition-colors duration-300">
+                    <div id="billing-dot" class="w-4.5 h-4.5 bg-primary rounded-full transition-transform duration-300 transform translate-x-0"></div>
+                </button>
+                <span id="label-annual" class="text-sm font-medium text-slate-400">Annual (Save 20%)</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <!-- Tier 1 -->
+            <div class="glass-panel rounded-2xl p-8 border-white/10 flex flex-col justify-between min-h-[420px]">
+                <div>
+                    <h3 class="text-lg font-bold text-white">Individual Guardian</h3>
+                    <p class="text-xs text-slate-500 font-mono mt-1">SINGLE PROFILE VIGILANCE</p>
+                    <div class="my-6">
+                        <span class="text-4xl font-extrabold text-white" id="price-individual">$19</span>
+                        <span class="text-slate-500 text-sm" id="period-individual">/ mo</span>
+                    </div>
+                    <ul class="space-y-3.5 text-sm text-slate-300">
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-lg">check</span>
+                            1 Live Digital Health Twin
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-lg">check</span>
+                            Unlimited Medicine Scanning & OCR
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-lg">check</span>
+                            SOS Emergency PDF & QR Card
+                        </li>
+                    </ul>
+                </div>
+                <a class="w-full text-center py-3 bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 rounded-xl text-sm font-semibold mt-8 block transition-all" href="../interactive_ai_health_twin_dashboard/code.html">
+                    Start Monitoring Now
+                </a>
+            </div>
+
+            <!-- Tier 2 -->
+            <div class="glass-panel rounded-2xl p-8 border-primary/20 bg-gradient-to-tr from-cardBg via-cardBg to-primary/5 flex flex-col justify-between min-h-[420px] relative">
+                <div class="absolute -top-3.5 right-6 bg-primary text-slate-950 px-3 py-1 rounded-full text-[10px] font-bold tracking-wider font-mono">POPULAR</div>
+                <div>
+                    <h3 class="text-lg font-bold text-white">Family Guardian Swarm</h3>
+                    <p class="text-xs text-primary font-mono mt-1">UP TO 5 FAMILY MEMBERS</p>
+                    <div class="my-6">
+                        <span class="text-4xl font-extrabold text-white" id="price-family">$49</span>
+                        <span class="text-slate-500 text-sm" id="period-family">/ mo</span>
+                    </div>
+                    <ul class="space-y-3.5 text-sm text-slate-300">
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-lg">check</span>
+                            5 Synchronized Health Twins
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-lg">check</span>
+                            Drug Interaction & Swarm analysis
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-lg">check</span>
+                            Consolidated Family Risk Dashboard
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-lg">check</span>
+                            HIPAA Compliant Cloud Sync
+                        </li>
+                    </ul>
+                </div>
+                <a class="w-full text-center py-3.5 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/95 hover:to-primary/75 text-slate-950 font-bold rounded-xl text-sm mt-8 block shadow-lg shadow-primary/10 transition-all hover:scale-[1.01] active:scale-[0.99]" href="../interactive_ai_health_twin_dashboard/code.html">
+                    Upgrade to Family Swarm
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="w-full py-16 px-6 lg:px-12 bg-slate-950 border-t border-white/5 mt-auto">
+        <div class="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <div>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-secondary flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white text-lg">shield_heart</span>
+                    </div>
+                    <span class="font-bold text-base text-white">HealthTwin Guardian AI</span>
+                </div>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    Protecting lives, simplifying medicine, and syncing human health parameters under premium cryptographic security pipelines.
+                </p>
+            </div>
+            <div>
+                <h5 class="text-xs font-mono text-slate-400 uppercase tracking-widest mb-4">Product</h5>
+                <ul class="space-y-2.5 text-sm text-slate-500">
+                    <li><a class="hover:text-primary transition-colors" href="../interactive_ai_health_twin_dashboard/code.html">Dashboard Core</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="../medical_report_explainer_blood_panel/code.html">Blood Report explainer</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="../emergency_mode_instant_health_card/code.html">SOS Card Card</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-xs font-mono text-slate-400 uppercase tracking-widest mb-4">Security</h5>
+                <ul class="space-y-2.5 text-sm text-slate-500">
+                    <li><a class="hover:text-primary transition-colors" href="#">HIPAA Compliance</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="#">GDPR Verification</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="../secure_login_healthtwin_guardian_ai/code.html">2FA Setup</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-xs font-mono text-slate-400 uppercase tracking-widest mb-4">Contacts</h5>
+                <p class="text-sm text-slate-500 mb-2">Emergency helpline: SOS-911-TWIN</p>
+                <p class="text-xs text-slate-600 font-mono">Clinical operations based globally.</p>
+            </div>
+        </div>
+        <div class="max-w-[1440px] mx-auto border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-600 font-mono">
+            <p>© 2026 HealthTwin Guardian AI. Developed for Global Bio-Security.</p>
+            <p>Design System matching Material 3. Stripe & Linear styling.</p>
+        </div>
+    </footer>
+
+    <script>
+        let isAnnual = false;
+        function toggleBilling() {
+            isAnnual = !isAnnual;
+            const dot = document.getElementById('billing-dot');
+            const lblMonthly = document.getElementById('label-monthly');
+            const lblAnnual = document.getElementById('label-annual');
+            const pIndividual = document.getElementById('price-individual');
+            const pFamily = document.getElementById('price-family');
+            const perIndividual = document.getElementById('period-individual');
+            const perFamily = document.getElementById('period-family');
+
+            if (isAnnual) {
+                dot.classList.add('translate-x-6');
+                lblMonthly.classList.remove('text-primary');
+                lblMonthly.classList.add('text-slate-400');
+                lblAnnual.classList.remove('text-slate-400');
+                lblAnnual.classList.add('text-primary');
+
+                pIndividual.textContent = '$152';
+                pFamily.textContent = '$392';
+                perIndividual.textContent = '/ yr';
+                perFamily.textContent = '/ yr';
+            } else {
+                dot.classList.remove('translate-x-6');
+                lblMonthly.classList.remove('text-slate-400');
+                lblMonthly.classList.add('text-primary');
+                lblAnnual.classList.remove('text-primary');
+                lblAnnual.classList.add('text-slate-400');
+
+                pIndividual.textContent = '$19';
+                pFamily.textContent = '$49';
+                perIndividual.textContent = '/ mo';
+                perFamily.textContent = '/ mo';
+            }
+        }
+    </script>
+</body>
+</html>

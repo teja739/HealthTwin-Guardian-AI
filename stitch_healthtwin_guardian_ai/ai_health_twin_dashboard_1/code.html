@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>HealthTwin Guardian AI - Premium Clinical Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .mesh-gradient {
+            background-color: #060913;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(20, 184, 166, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(239, 68, 68, 0.06) 0px, transparent 50%);
+        }
+        .glass-panel {
+            background: rgba(13, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .health-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .6; transform: scale(1.08); }
+        }
+        .active-glow {
+            filter: drop-shadow(0 0 10px rgba(20, 184, 166, 0.4));
+        }
+        .scan-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #14b8a6, transparent);
+            animation: scanLine 2s linear infinite;
+        }
+        @keyframes scanLine {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(20, 184, 166, 0.3);
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#14b8a6",
+                        secondary: "#3b82f6",
+                        darkBg: "#060913",
+                        cardBg: "#0d1423",
+                        accentRed: "#ef4444"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="mesh-gradient text-slate-100 min-h-screen overflow-x-hidden flex flex-col justify-between">
+
+    <header class="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-6 h-16 bg-darkBg/60 backdrop-blur-xl border-b border-white/5 shadow-sm">
+        <div class="flex items-center gap-3">
+            <a href="../landing_page_healthtwin_guardian_ai/code.html" class="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/20">
+                <span class="material-symbols-outlined text-white text-lg" style="font-variation-settings: 'FILL' 1;">shield_heart</span>
+            </a>
+            <div>
+                <a href="../landing_page_healthtwin_guardian_ai/code.html" class="font-bold text-sm tracking-tight text-white hover:text-primary transition-colors">HealthTwin</a>
+                <span class="text-[9px] font-mono block text-primary font-semibold tracking-wider">GUARDIAN AI</span>
+            </div>
+        </div>
+        
+        <div class="hidden md:flex items-center gap-6 text-xs font-mono">
+            <div class="flex items-center gap-2 bg-white/5 border border-white/5 rounded-full px-3 py-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary health-pulse"></span>
+                <span class="text-slate-400">Twin Sync: <strong class="text-white">98.4%</strong></span>
+            </div>
+            <div class="flex items-center gap-2 bg-white/5 border border-white/5 rounded-full px-3 py-1">
+                <span class="text-slate-400">Active Swarm: <strong class="text-primary">7 Agents</strong></span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button onclick="toggleTab('assistant')" class="p-2 hover:bg-white/5 rounded-xl transition-all relative group" title="Multilingual Assistant">
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">translate</span>
+            </button>
+            <button class="p-2 hover:bg-white/5 rounded-xl transition-all relative group" title="Security Notifications">
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-slate-200 transition-colors">notifications</span>
+                <span class="absolute top-2 right-2 w-1.5 h-1.5 bg-primary rounded-full"></span>
+            </button>
+            <a class="flex items-center gap-2 pl-2 border-l border-white/10 group" href="../secure_login_healthtwin_guardian_ai/code.html">
+                <div class="w-8 h-8 rounded-full bg-slate-800 border border-white/10 overflow-hidden flex items-center justify-center">
+                    <span class="material-symbols-outlined text-slate-400 text-lg group-hover:text-primary transition-colors">account_circle</span>
+                </div>
+            </a>
+        </div>
+    </header>
+
+    <div class="flex flex-1 pt-16 relative">
+        <aside class="hidden lg:flex flex-col fixed left-0 top-16 h-[calc(100vh-64px)] w-60 p-4 bg-darkBg/40 border-r border-white/5 z-30">
+            <nav class="flex-1 space-y-1 font-mono text-xs">
+                <div class="text-[9px] font-bold text-slate-500 uppercase tracking-widest px-3 py-2 mt-2">Biometric Core</div>
+                
+                <button onclick="toggleTab('dashboard')" id="btn-dashboard" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all text-left">
+                    <span class="material-symbols-outlined text-base">dashboard</span>
+                    <span>Health Twin Home</span>
+                </button>
+
+                <button onclick="toggleTab('bodymap')" id="btn-bodymap" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all text-left">
+                    <span class="material-symbols-outlined text-base">accessibility_new</span>
+                    <span>Human Risk Map</span>
+                </button>
+
+                <button onclick="toggleTab('swarm')" id="btn-swarm" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all text-left">
+                    <span class="material-symbols-outlined text-base">hub</span>
+                    <span>AI Agent Swarm</span>
+                </button>
+
+                <div class="text-[9px] font-bold text-slate-500 uppercase tracking-widest px-3 py-2 mt-4">Command Center</div>
+
+                <button onclick="toggleTab('command')" id="btn-command" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all text-left">
+                    <span class="material-symbols-outlined text-base">monitoring</span>
+                    <span>Mission Health Center</span>
+                </button>
+
+                <button onclick="toggleTab('analyzer')" id="btn-analyzer" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all text-left">
+                    <span class="material-symbols-outlined text-base">clinical_notes</span>
+                    <span>Report Analyzer</span>
+                </button>
+
+                <button onclick="toggleTab('scanner')" id="btn-scanner" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all text-left">
+                    <span class="material-symbols-outlined text-base">qr_code_scanner</span>
+                    <span>Medicine Scanner</span>
+                </button>
+
+                <button onclick="toggleTab('family')" id="btn-family" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all text-left">
+                    <span class="material-symbols-outlined text-base">family_history</span>
+                    <span>Family Dashboard</span>
+                </button>
+
+                <div class="text-[9px] font-bold text-slate-500 uppercase tracking-widest px-3 py-2 mt-4">Assistance & SOS</div>
+
+                <button onclick="toggleTab('assistant')" id="btn-assistant" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all text-left">
+                    <span class="material-symbols-outlined text-base">chat</span>
+                    <span>Multilingual Chat</span>
+                </button>
+
+                <button onclick="toggleTab('emergency')" id="btn-emergency" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-accentRed/85 hover:text-accentRed hover:bg-accentRed/5 border border-transparent hover:border-accentRed/10 transition-all text-left">
+                    <span class="material-symbols-outlined text-base">emergency</span>
+                    <span>Emergency SOS</span>
+                </button>
+            </nav>
+            
+            <div class="mt-auto pt-4 border-t border-white/5 flex flex-col gap-2">
+                <button onclick="toggleMobileSimulator()" id="simulator-toggle" class="w-full py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-mono text-[10px] text-slate-300 flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-sm">phone_iphone</span>
+                    <span id="simulator-text">Enable Mobile View</span>
+                </button>
+                <a class="w-full py-2 border border-slate-700 text-slate-400 hover:text-slate-200 font-mono text-[10px] text-center rounded-xl block" href="../secure_login_healthtwin_guardian_ai/code.html">
+                    Disconnect Session
+                </a>
+            </div>
+        </aside>
+
+        <main id="workspace-pane" class="flex-grow lg:ml-60 p-6 flex flex-col min-h-[calc(100vh-64px)] justify-between transition-all duration-300 w-full overflow-hidden">
+            <div id="simulator-wrapper" class="w-full max-w-[1280px] mx-auto flex justify-center items-center flex-grow">
+                <div id="dashboard-grid" class="w-full flex flex-col gap-6">
+
+                    <!-- TAB 1: HEALTH TWIN HOME / DASHBOARD -->
+                    <div id="tab-dashboard" class="space-y-6">
+                        <div class="glass-panel rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                                <span class="material-symbols-outlined text-[120px] text-primary">genetics</span>
+                            </div>
+                            <div class="relative w-36 h-36 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-full h-full transform -rotate-90">
+                                    <circle class="text-white/5" cx="72" cy="72" fill="transparent" r="64" stroke="currentColor" stroke-width="8"></circle>
+                                    <circle class="text-primary active-glow" cx="72" cy="72" fill="transparent" r="64" stroke="currentColor" stroke-dasharray="402" stroke-dashoffset="48" stroke-width="8"></circle>
+                                </svg>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span class="text-3xl font-extrabold text-white">88</span>
+                                    <span class="text-[9px] font-mono text-primary font-bold uppercase tracking-widest">Optimal</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-2 z-10">
+                                <h1 class="text-2xl font-bold tracking-tight text-white">Digital Health Twin Active</h1>
+                                <p class="text-slate-400 text-sm max-w-xl">Your biological twin is actively receiving vital feed streams. Predictive analytics show stable cardiac metrics and blood chemical balances over the next 48-hour window.</p>
+                                <div class="flex flex-wrap gap-2 mt-1">
+                                    <span class="bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full text-[10px] font-mono flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 bg-primary rounded-full health-pulse"></span> Streaming Realtime
+                                    </span>
+                                    <span class="bg-white/5 border border-white/5 text-slate-400 px-3 py-1 rounded-full text-[10px] font-mono">Last Sync: 4s ago</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                            <div class="glass-panel p-4 rounded-xl flex flex-col justify-between min-h-[110px]">
+                                <span class="text-[10px] font-mono text-slate-500 uppercase tracking-wider block">Health Score</span>
+                                <div class="flex justify-between items-end mt-2">
+                                    <span class="text-2xl font-bold text-white">88/100</span>
+                                    <span class="material-symbols-outlined text-primary">heart_broken</span>
+                                </div>
+                            </div>
+                            <div class="glass-panel p-4 rounded-xl flex flex-col justify-between min-h-[110px]">
+                                <span class="text-[10px] font-mono text-slate-500 uppercase tracking-wider block">Diabetes Risk</span>
+                                <div class="flex justify-between items-end mt-2">
+                                    <span class="text-2xl font-bold text-emerald-400">12%</span>
+                                    <span class="text-[10px] font-mono text-emerald-400 uppercase font-bold">Low</span>
+                                </div>
+                            </div>
+                            <div class="glass-panel p-4 rounded-xl flex flex-col justify-between min-h-[110px]">
+                                <span class="text-[10px] font-mono text-slate-500 uppercase tracking-wider block">Heart Health</span>
+                                <div class="flex justify-between items-end mt-2">
+                                    <span class="text-2xl font-bold text-white">72 BPM</span>
+                                    <span class="material-symbols-outlined text-primary">favorite</span>
+                                </div>
+                            </div>
+                            <div class="glass-panel p-4 rounded-xl flex flex-col justify-between min-h-[110px]">
+                                <span class="text-[10px] font-mono text-slate-500 uppercase tracking-wider block">Meds Compliance</span>
+                                <div class="flex justify-between items-end mt-2">
+                                    <span class="text-2xl font-bold text-white">100%</span>
+                                    <span class="material-symbols-outlined text-emerald-400">verified</span>
+                                </div>
+                            </div>
+                            <div class="glass-panel p-4 rounded-xl flex flex-col justify-between min-h-[110px]">
+                                <span class="text-[10px] font-mono text-slate-500 uppercase tracking-wider block">Sleep Quality</span>
+                                <div class="flex justify-between items-end mt-2">
+                                    <span class="text-2xl font-bold text-white">92%</span>
+                                    <span class="material-symbols-outlined text-indigo-400">bedtime</span>
+                                </div>
+                            </div>
+                            <div class="glass-panel p-4 rounded-xl flex flex-col justify-between min-h-[110px]">
+                                <span class="text-[10px] font-mono text-slate-500 uppercase tracking-wider block">Stress Score</span>
+                                <div class="flex justify-between items-end mt-2">
+                                    <span class="text-2xl font-bold text-yellow-400">Low</span>
+                                    <span class="material-symbols-outlined text-yellow-400">psychology_alt</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                            <div class="lg:col-span-8 glass-panel p-6 rounded-2xl flex flex-col justify-between min-h-[350px]">
+                                <div class="flex justify-between items-center border-b border-white/5 pb-4 mb-4">
+                                    <div>
+                                        <h3 class="text-sm font-bold text-white font-mono uppercase">Vitals Trend Analysis</h3>
+                                        <span class="text-[10px] text-slate-500 font-mono">Real-time biometrics prediction curve</span>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <span class="bg-primary/10 text-primary text-[10px] px-2.5 py-1 rounded-md border border-primary/20">7 Days</span>
+                                        <span class="text-slate-400 text-[10px] px-2.5 py-1 rounded-md hover:bg-white/5 cursor-pointer">30 Days</span>
+                                    </div>
+                                </div>
+                                <div class="flex-grow w-full h-44 relative flex items-end">
+                                    <svg class="w-full h-full" viewBox="0 0 500 150">
+                                        <defs>
+                                            <linearGradient id="chart-grad" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="0%" stop-color="#14b8a6" stop-opacity="0.3"/>
+                                                <stop offset="100%" stop-color="#14b8a6" stop-opacity="0.0"/>
+                                            </linearGradient>
+                                        </defs>
+                                        <path d="M0,120 Q50,90 100,105 T200,60 T300,75 T400,45 T500,30" fill="none" stroke="#14b8a6" stroke-width="3" />
+                                        <path d="M0,120 Q50,90 100,105 T200,60 T300,75 T400,45 T500,30 L500,150 L0,150 Z" fill="url(#chart-grad)" />
+                                    </svg>
+                                    <div class="absolute inset-0 flex flex-col justify-between pointer-events-none border-l border-b border-white/5 font-mono text-[9px] text-slate-600">
+                                        <div class="pl-2">120 BPM (MAX)</div>
+                                        <div class="pl-2">80 BPM (NORM)</div>
+                                        <div class="pl-2">40 BPM (MIN)</div>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center text-[10px] font-mono text-slate-500 pt-4 border-t border-white/5">
+                                    <span>Mon</span>
+                                    <span>Tue</span>
+                                    <span>Wed</span>
+                                    <span>Thu</span>
+                                    <span>Fri</span>
+                                    <span>Sat</span>
+                                    <span>Sun</span>
+                                </div>
+                            </div>
+                            <div class="lg:col-span-4 glass-panel p-6 rounded-2xl flex flex-col justify-between min-h-[350px]">
+                                <div class="border-b border-white/5 pb-4 mb-4">
+                                    <h3 class="text-sm font-bold text-white font-mono uppercase">Biomarker Risk Space</h3>
+                                    <span class="text-[10px] text-slate-500 font-mono">Weighted target metrics</span>
+                                </div>
+                                <div class="space-y-4">
+                                    <div>
+                                        <div class="flex justify-between text-xs font-mono mb-1.5">
+                                            <span class="text-slate-400">Cardiovascular Risk</span>
+                                            <span class="text-primary font-bold">14%</span>
+                                        </div>
+                                        <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-primary h-full w-[14%] rounded-full"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-xs font-mono mb-1.5">
+                                            <span class="text-slate-400">Metabolic Index</span>
+                                            <span class="text-slate-200 font-bold">38%</span>
+                                        </div>
+                                        <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-secondary h-full w-[38%] rounded-full"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-xs font-mono mb-1.5">
+                                            <span class="text-slate-400">Sleep Deprivation</span>
+                                            <span class="text-yellow-400 font-bold">62%</span>
+                                        </div>
+                                        <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-yellow-400 h-full w-[62%] rounded-full"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-xs font-mono mb-1.5">
+                                            <span class="text-slate-400">General Bio-load</span>
+                                            <span class="text-slate-200 font-bold">25%</span>
+                                        </div>
+                                        <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-slate-500 h-full w-[25%] rounded-full"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-white/5 border border-white/5 p-3 rounded-xl flex items-center gap-3.5 mt-4">
+                                    <span class="material-symbols-outlined text-yellow-400">warning</span>
+                                    <span class="text-[10px] text-slate-400 font-mono">Recommend increasing deep sleep hours to lower stress biomarkers.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: HUMAN BODY RISK MAP -->
+                    <div id="tab-bodymap" class="hidden space-y-6">
+                        <div class="glass-panel rounded-2xl p-6">
+                            <div class="flex flex-col md:flex-row items-center gap-8 justify-between">
+                                <div class="max-w-md space-y-3">
+                                    <span class="text-[10px] font-mono text-primary uppercase font-bold tracking-wider">Localized Bio-diagnostics</span>
+                                    <h2 class="text-2xl font-bold tracking-tight text-white">Anatomical Risk Map</h2>
+                                    <p class="text-slate-400 text-sm leading-relaxed">
+                                        Click or hover on glowing organ hotspots to load localized sensor stream metrics, genetic drift thresholds, and active diagnostics logs.
+                                    </p>
+                                    <div class="grid grid-cols-2 gap-3 pt-2 font-mono text-[10px]">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                                            <span class="text-slate-300">Green: Optimal Vitals</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+                                            <span class="text-slate-300">Yellow: Mild Stress</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-accentRed"></span>
+                                            <span class="text-slate-300">Red: Priority Watch</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="relative w-80 h-[380px] bg-slate-950/40 border border-white/5 rounded-2xl overflow-hidden flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-[320px] text-primary/10 select-none">accessibility_new</span>
+
+                                    <button onclick="selectOrgan('brain')" class="absolute top-[12%] left-[50%] -translate-x-1/2 group">
+                                        <div class="w-4 h-4 bg-emerald-500 rounded-full health-pulse shadow-[0_0_12px_#10b981] group-hover:scale-125 transition-transform"></div>
+                                    </button>
+
+                                    <button onclick="selectOrgan('lungs')" class="absolute top-[28%] left-[45%] group">
+                                        <div class="w-4 h-4 bg-emerald-500 rounded-full health-pulse shadow-[0_0_12px_#10b981] group-hover:scale-125 transition-transform"></div>
+                                    </button>
+
+                                    <button onclick="selectOrgan('heart')" class="absolute top-[32%] left-[52%] group">
+                                        <div class="w-4 h-4 bg-yellow-500 rounded-full health-pulse shadow-[0_0_12px_#f59e0b] group-hover:scale-125 transition-transform"></div>
+                                    </button>
+
+                                    <button onclick="selectOrgan('liver')" class="absolute top-[42%] left-[44%] group">
+                                        <div class="w-4 h-4 bg-emerald-500 rounded-full health-pulse shadow-[0_0_12px_#10b981] group-hover:scale-125 transition-transform"></div>
+                                    </button>
+
+                                    <button onclick="selectOrgan('kidneys')" class="absolute top-[52%] left-[49%] group">
+                                        <div class="w-4 h-4 bg-accentRed rounded-full health-pulse shadow-[0_0_12px_#ef4444] group-hover:scale-125 transition-transform"></div>
+                                    </button>
+                                </div>
+
+                                <div class="w-full max-w-sm glass-panel p-5 rounded-xl border-white/5" id="organ-detail-card">
+                                    <div class="flex justify-between items-center border-b border-white/5 pb-3 mb-3">
+                                        <span class="text-sm font-bold text-white font-mono uppercase" id="organ-title">Brain (Cerebrum)</span>
+                                        <span class="bg-emerald-500/10 text-emerald-400 font-mono text-[10px] px-2 py-0.5 rounded" id="organ-status">OPTIMAL</span>
+                                    </div>
+                                    <div class="space-y-3 text-xs">
+                                        <p class="text-slate-400 leading-relaxed" id="organ-desc">
+                                            Alpha wave coherence is 94%. Cortisol telemetry indicates low neural strain. Synaptic response forecasting is optimal.
+                                        </p>
+                                        <div class="grid grid-cols-2 gap-2 font-mono text-[10px] bg-white/5 p-3 rounded-lg border border-white/5">
+                                            <div>
+                                                <span class="text-slate-500 block">LOCAL RISK:</span>
+                                                <span class="text-white font-bold" id="organ-risk">2.4%</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-slate-500 block">BIOSTREAM:</span>
+                                                <span class="text-primary font-bold" id="organ-stream">ACTIVE</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: AI AGENT SWARM -->
+                    <div id="tab-swarm" class="hidden space-y-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                            <div class="lg:col-span-8 glass-panel p-6 rounded-2xl flex flex-col justify-between min-h-[400px] relative">
+                                <div class="flex justify-between items-center border-b border-white/5 pb-4 mb-4">
+                                    <div>
+                                        <h3 class="text-sm font-bold text-white font-mono uppercase">Guardian Agent Orchestration</h3>
+                                        <span class="text-[10px] text-slate-500 font-mono">Click nodes to query specific sub-agents</span>
+                                    </div>
+                                    <span class="bg-primary/10 border border-primary/20 text-primary text-[10px] font-mono px-3 py-1 rounded-full flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 bg-primary rounded-full health-pulse"></span> Multi-Agent Active
+                                    </span>
+                                </div>
+
+                                <div class="relative w-full h-72 border border-white/5 bg-slate-950/40 rounded-xl overflow-hidden flex items-center justify-center">
+                                    <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#14b8a6 1px, transparent 1px); background-size: 20px 20px;"></div>
+                                    
+                                    <svg class="absolute inset-0 w-full h-full pointer-events-none">
+                                        <line x1="50%" y1="50%" x2="20%" y2="20%" stroke="rgba(20, 184, 166, 0.4)" stroke-width="2" />
+                                        <line x1="50%" y1="50%" x2="50%" y2="15%" stroke="rgba(20, 184, 166, 0.4)" stroke-width="2" />
+                                        <line x1="50%" y1="50%" x2="80%" y2="20%" stroke="rgba(20, 184, 166, 0.4)" stroke-width="2" />
+                                        <line x1="50%" y1="50%" x2="15%" y2="60%" stroke="rgba(20, 184, 166, 0.4)" stroke-width="2" />
+                                        <line x1="50%" y1="50%" x2="85%" y2="60%" stroke="rgba(20, 184, 166, 0.4)" stroke-width="2" />
+                                        <line x1="50%" y1="50%" x2="30%" y2="85%" stroke="rgba(20, 184, 166, 0.4)" stroke-width="2" />
+                                        <line x1="50%" y1="50%" x2="70%" y2="85%" stroke="rgba(20, 184, 166, 0.4)" stroke-width="2" />
+                                    </svg>
+
+                                    <div class="absolute w-14 h-14 bg-gradient-to-tr from-primary to-secondary rounded-full flex items-center justify-center shadow-xl shadow-primary/20 z-10 agent-node">
+                                        <span class="material-symbols-outlined text-white text-2xl" style="font-variation-settings: 'FILL' 1;">psychology</span>
+                                    </div>
+
+                                    <button onclick="queryAgent('blood')" class="absolute top-[12%] left-[15%] group flex flex-col items-center">
+                                        <div class="w-10 h-10 bg-slate-900 border border-primary/30 rounded-xl flex items-center justify-center group-hover:border-primary active:scale-95 transition-all shadow-md">
+                                            <span class="text-lg">🩸</span>
+                                        </div>
+                                        <span class="text-[9px] font-mono text-slate-400 mt-1 uppercase">Blood</span>
+                                    </button>
+
+                                    <button onclick="queryAgent('med')" class="absolute top-[8%] left-[50%] -translate-x-1/2 group flex flex-col items-center">
+                                        <div class="w-10 h-10 bg-slate-900 border border-primary/30 rounded-xl flex items-center justify-center group-hover:border-primary active:scale-95 transition-all shadow-md">
+                                            <span class="text-lg">💊</span>
+                                        </div>
+                                        <span class="text-[9px] font-mono text-slate-400 mt-1 uppercase">Meds</span>
+                                    </button>
+
+                                    <button onclick="queryAgent('cardiac')" class="absolute top-[12%] right-[15%] group flex flex-col items-center">
+                                        <div class="w-10 h-10 bg-slate-900 border border-primary/30 rounded-xl flex items-center justify-center group-hover:border-primary active:scale-95 transition-all shadow-md">
+                                            <span class="text-lg">❤️</span>
+                                        </div>
+                                        <span class="text-[9px] font-mono text-slate-400 mt-1 uppercase">Cardiac</span>
+                                    </button>
+
+                                    <button onclick="queryAgent('predict')" class="absolute top-[50%] left-[5%] group flex flex-col items-center">
+                                        <div class="w-10 h-10 bg-slate-900 border border-primary/30 rounded-xl flex items-center justify-center group-hover:border-primary active:scale-95 transition-all shadow-md">
+                                            <span class="text-lg">🧠</span>
+                                        </div>
+                                        <span class="text-[9px] font-mono text-slate-400 mt-1 uppercase">Predict</span>
+                                    </button>
+
+                                    <button onclick="queryAgent('document')" class="absolute top-[50%] right-[5%] group flex flex-col items-center">
+                                        <div class="w-10 h-10 bg-slate-900 border border-primary/30 rounded-xl flex items-center justify-center group-hover:border-primary active:scale-95 transition-all shadow-md">
+                                            <span class="text-lg">📄</span>
+                                        </div>
+                                        <span class="text-[9px] font-mono text-slate-400 mt-1 uppercase">Doc</span>
+                                    </button>
+
+                                    <button onclick="queryAgent('translation')" class="absolute bottom-[5%] left-[25%] group flex flex-col items-center">
+                                        <div class="w-10 h-10 bg-slate-900 border border-primary/30 rounded-xl flex items-center justify-center group-hover:border-primary active:scale-95 transition-all shadow-md">
+                                            <span class="text-lg">🌍</span>
+                                        </div>
+                                        <span class="text-[9px] font-mono text-slate-400 mt-1 uppercase">Translate</span>
+                                    </button>
+
+                                    <button onclick="queryAgent('emergency')" class="absolute bottom-[5%] right-[25%] group flex flex-col items-center">
+                                        <div class="w-10 h-10 bg-slate-900 border border-accentRed/30 rounded-xl flex items-center justify-center group-hover:border-accentRed active:scale-95 transition-all shadow-md">
+                                            <span class="text-lg">🚨</span>
+                                        </div>
+                                        <span class="text-[9px] font-mono text-slate-400 mt-1 uppercase">SOS</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="lg:col-span-4 glass-panel p-6 rounded-2xl flex flex-col justify-between min-h-[400px]">
+                                <div class="border-b border-white/5 pb-4 mb-4">
+                                    <h3 class="text-sm font-bold text-white font-mono uppercase">Live Agent Log Streams</h3>
+                                    <span class="text-[10px] text-slate-500 font-mono">Consolidated swarm activities</span>
+                                </div>
+                                
+                                <div id="swarm-logs" class="flex-grow bg-slate-950/80 rounded-xl p-4 border border-white/5 font-mono text-[10px] text-primary space-y-2 overflow-y-auto h-60">
+                                    <p class="text-slate-500">[00:42:01] Swarm initialized...</p>
+                                    <p class="text-slate-400">[00:42:02] Cardiac Agent checking metrics...</p>
+                                    <p class="text-emerald-400">[00:42:02] Vitals in optimal bounds (HR: 72)</p>
+                                    <p class="text-slate-400">[00:43:10] Blood Agent scanned CBC panel</p>
+                                    <p class="text-yellow-400">[00:43:12] Warning: Glucose slightly elevated</p>
+                                    <p class="text-slate-400">[00:45:00] Syncing HealthTwin state...</p>
+                                </div>
+
+                                <div class="mt-4 flex gap-2">
+                                    <button onclick="clearSwarmLogs()" class="flex-1 py-2 bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 font-mono text-[10px] rounded-lg transition-all">
+                                        Clear Logs
+                                    </button>
+                                    <button onclick="injectSimulatedLog()" class="flex-1 py-2 bg-primary text-slate-950 font-mono text-[10px] font-bold rounded-lg hover:bg-primary/90 transition-all">
+                                        Query Swarm
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: MISSION HEALTH CENTER -->
+                    <div id="tab-command" class="hidden space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                            <div class="glass-panel p-4 rounded-xl text-center">
+                                <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block">Reports Analyzed</span>
+                                <span class="text-3xl font-extrabold text-white block mt-2 animate-pulse">48</span>
+                                <span class="text-[9px] font-mono text-primary font-bold">100% SUCCESS</span>
+                            </div>
+                            <div class="glass-panel p-4 rounded-xl text-center">
+                                <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block">Risks Predicted</span>
+                                <span class="text-3xl font-extrabold text-yellow-400 block mt-2">12</span>
+                                <span class="text-[9px] font-mono text-yellow-400 font-bold">STABLE PROFILE</span>
+                            </div>
+                            <div class="glass-panel p-4 rounded-xl text-center">
+                                <span class="text-3xl font-extrabold text-white block mt-2">5</span>
+                                <span class="text-[9px] font-mono text-slate-400 font-bold">DAILY SCHEDULE</span>
+                            </div>
+                            <div class="glass-panel p-4 rounded-xl text-center">
+                                <span class="text-3xl font-extrabold text-white block mt-2">1,248</span>
+                                <span class="text-[9px] font-mono text-primary font-bold">SECURE PIPELINE</span>
+                            </div>
+                            <div class="glass-panel p-4 rounded-xl text-center">
+                                <span class="text-3xl font-extrabold text-accentRed block mt-2">1</span>
+                                <span class="text-[9px] font-mono text-accentRed font-bold">ACTIVE SOS</span>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-6 rounded-2xl min-h-[400px] flex flex-col justify-between">
+                            <div class="flex justify-between items-center border-b border-white/5 pb-4 mb-4">
+                                <div>
+                                    <h3 class="text-sm font-bold text-white font-mono uppercase">Vigilance Analytics Command</h3>
+                                    <span class="text-[10px] text-slate-500 font-mono">Consolidated diagnostic and prediction matrices</span>
+                                </div>
+                                <span class="text-[10px] font-mono text-slate-400 bg-white/5 border border-white/5 px-3 py-1 rounded">
+                                    Telemetry Stream ID: HTGAI-CORE-10992
+                                </span>
+                            </div>
+
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-grow">
+                                <div class="lg:col-span-2 space-y-4">
+                                    <div class="space-y-1.5">
+                                        <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Bio-sensor Grid State</span>
+                                        <div class="grid grid-cols-12 gap-1.5">
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-yellow-500 rounded animate-pulse"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                            <div class="w-full h-4 bg-emerald-500 rounded"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="h-44 border border-white/5 bg-slate-950/60 rounded-xl p-4 flex flex-col justify-between relative">
+                                        <div class="flex justify-between items-center text-[9px] font-mono text-slate-500">
+                                            <span>ANOMALY INDEX PROJECTION</span>
+                                            <span class="text-primary font-bold">STABLE</span>
+                                        </div>
+                                        <svg class="w-full h-24" viewBox="0 0 400 100">
+                                            <path d="M0,80 L40,80 L80,75 L120,60 L160,82 L200,80 L240,78 L280,30 L320,80 L360,82 L400,81" fill="none" stroke="#ef4444" stroke-width="2" />
+                                            <line x1="0" y1="50" x2="400" y2="50" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4" />
+                                        </svg>
+                                        <div class="flex justify-between text-[8px] font-mono text-slate-600">
+                                            <span>00:00</span>
+                                            <span>04:00</span>
+                                            <span>08:00</span>
+                                            <span>12:00</span>
+                                            <span>16:00</span>
+                                            <span>20:00</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white/5 border border-white/5 p-4 rounded-xl flex flex-col justify-between text-xs space-y-4">
+                                    <div>
+                                        <span class="text-[10px] font-mono text-slate-400 block uppercase mb-1">Active AI Warnings</span>
+                                        <div class="space-y-2">
+                                            <div class="p-2.5 bg-yellow-500/10 border border-yellow-500/20 rounded-lg flex items-center gap-2 text-yellow-400 font-mono text-[9px]">
+                                                <span class="material-symbols-outlined text-sm">warning</span>
+                                                <span>Stress levels higher than baseline during sleep.</span>
+                                            </div>
+                                            <div class="p-2.5 bg-primary/10 border border-primary/20 rounded-lg flex items-center gap-2 text-primary font-mono text-[9px]">
+                                                <span class="material-symbols-outlined text-sm">check_circle</span>
+                                                <span>CBC panel sync matches historical profiles.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pt-2 border-t border-white/5 font-mono text-[10px]">
+                                        <span class="text-slate-500 block">Orchestrator Integrity:</span>
+                                        <span class="text-white font-bold">100% ONLINE</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 5: MEDICAL REPORT ANALYZER -->
+                    <div id="tab-analyzer" class="hidden space-y-6">
+                        <div class="glass-panel rounded-2xl p-6">
+                            <h2 class="text-lg font-bold tracking-tight text-white mb-2">Medical Report Analyzer</h2>
+                            <p class="text-slate-400 text-sm mb-6">Upload clinical laboratory reports (PDF/JPG) to extract biomarkers and analyze health indices.</p>
+                            
+                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                                <div class="lg:col-span-5 flex flex-col gap-4">
+                                    <div id="drop-zone" class="border-2 border-dashed border-white/10 bg-slate-950/20 hover:bg-slate-950/40 rounded-2xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all min-h-[260px] relative">
+                                        <input type="file" id="report-file" class="hidden" onchange="simulateReportProcessing()"/>
+                                        <div onclick="document.getElementById('report-file').click()" class="flex flex-col items-center">
+                                            <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
+                                                <span class="material-symbols-outlined text-3xl">upload_file</span>
+                                            </div>
+                                            <h4 class="text-sm font-semibold text-white">Click or Drag PDF lab panel here</h4>
+                                            <p class="text-xs text-slate-500 mt-2">Supports Quest, Labcorp, and local diagnostic labs formats</p>
+                                        </div>
+
+                                        <div id="analyzer-loading" class="absolute inset-0 bg-darkBg/95 rounded-2xl flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+                                            <span class="material-symbols-outlined text-4xl text-primary animate-spin">sync</span>
+                                            <p class="text-xs font-mono text-slate-300 mt-4" id="analyzer-loading-status">Analyzing PDF markers...</p>
+                                            <div class="w-32 bg-white/5 h-1 rounded-full overflow-hidden mt-2">
+                                                <div class="bg-primary h-full w-0 transition-all duration-1000" id="analyzer-loading-progress"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button onclick="loadSampleReport()" class="w-full py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200 text-xs font-mono rounded-xl transition-all">
+                                        Load Sample CBC & Lipid Panel
+                                    </button>
+                                </div>
+
+                                <div class="lg:col-span-7 glass-card p-6 rounded-xl border border-white/5 space-y-6 opacity-60" id="analyzer-results-card">
+                                    <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                                        <div>
+                                            <h4 class="text-sm font-bold text-white font-mono uppercase">Extracted Biomarker Panel</h4>
+                                            <span class="text-[10px] text-slate-500 font-mono" id="results-meta">Awaiting document upload...</span>
+                                        </div>
+                                        <span class="bg-white/5 border border-white/5 text-slate-400 font-mono text-[9px] px-2.5 py-0.5 rounded" id="results-badge">NO DOC</span>
+                                    </div>
+
+                                    <div class="space-y-4 text-xs font-mono" id="results-fields">
+                                        <div class="flex justify-between items-center p-2.5 bg-white/5 rounded-lg border border-white/5">
+                                            <span class="text-slate-400">Fasting Blood Glucose</span>
+                                            <span class="text-slate-400">-- mg/dL</span>
+                                        </div>
+                                        <div class="flex justify-between items-center p-2.5 bg-white/5 rounded-lg border border-white/5">
+                                            <span class="text-slate-400">Total Cholesterol</span>
+                                            <span class="text-slate-400">-- mg/dL</span>
+                                        </div>
+                                        <div class="flex justify-between items-center p-2.5 bg-white/5 rounded-lg border border-white/5">
+                                            <span class="text-slate-400">HbA1c</span>
+                                            <span class="text-slate-400">-- %</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="space-y-2 font-mono text-[10px]" id="results-explanation">
+                                        <span class="text-slate-500 uppercase block">AI Clinical Summary</span>
+                                        <p class="text-slate-400 italic">No diagnostic markers parsed yet. Please trigger an analysis above.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 6: MEDICINE SCANNER -->
+                    <div id="tab-scanner" class="hidden space-y-6">
+                        <div class="glass-panel rounded-2xl p-6">
+                            <h2 class="text-lg font-bold tracking-tight text-white mb-2">Medicine Image Scanner & Safety Center</h2>
+                            <p class="text-slate-400 text-sm mb-6">Scan medications to retrieve safety ratings, correct dosage guidelines, and interactions warnings.</p>
+                            
+                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                                <div class="lg:col-span-5 flex flex-col gap-4">
+                                    <div id="camera-viewport" class="bg-slate-950/80 rounded-2xl p-8 border border-white/10 flex flex-col items-center justify-center text-center min-h-[260px] relative overflow-hidden">
+                                        <div class="absolute inset-0 border border-primary/20 pointer-events-none"></div>
+                                        
+                                        <div class="flex flex-col items-center z-10">
+                                            <span class="material-symbols-outlined text-4xl text-primary animate-pulse mb-3">photo_camera</span>
+                                            <span class="text-xs font-mono text-slate-300">SIMULATED CAMERA VIEWPORT</span>
+                                            <p class="text-[10px] text-slate-500 mt-1">Ready for medicine container image</p>
+                                        </div>
+                                        
+                                        <div id="scanner-loading" class="absolute inset-0 bg-darkBg/95 rounded-2xl flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+                                            <span class="material-symbols-outlined text-4xl text-primary animate-spin">sync</span>
+                                            <p class="text-xs font-mono text-slate-300 mt-4">Analyzing chemical name and dosage...</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button onclick="simulateMedicineScan('atorvastatin')" class="flex-1 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200 text-xs font-mono rounded-xl transition-all">
+                                            Atorvastatin Scan
+                                        </button>
+                                        <button onclick="simulateMedicineScan('ibuprofen')" class="flex-1 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200 text-xs font-mono rounded-xl transition-all">
+                                            Ibuprofen Scan
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="lg:col-span-7 glass-card p-6 rounded-xl border border-white/5 space-y-6 opacity-60" id="scanner-results-card">
+                                    <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                                        <div>
+                                            <h4 class="text-sm font-bold text-white font-mono uppercase" id="med-name">Atorvastatin Calcium</h4>
+                                            <span class="text-[10px] text-slate-500 font-mono" id="med-dosage">Dosage: Pending scan...</span>
+                                        </div>
+                                        <span class="bg-white/5 border border-white/5 text-slate-400 font-mono text-[9px] px-2.5 py-0.5 rounded" id="med-safety-badge">NO MEDICINE</span>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-4 text-xs font-mono">
+                                        <div class="p-3 bg-white/5 rounded-lg border border-white/5">
+                                            <span class="text-slate-500 block">CLINICAL PURPOSE:</span>
+                                            <span class="text-slate-200 font-bold" id="med-purpose">--</span>
+                                        </div>
+                                        <div class="p-3 bg-white/5 rounded-lg border border-white/5">
+                                            <span class="text-slate-500 block">SIDE EFFECTS:</span>
+                                            <span class="text-slate-200 font-bold" id="med-side">--</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-4 bg-white/5 border border-white/5 rounded-xl space-y-2 text-xs font-mono" id="med-interactions">
+                                        <span class="text-slate-500 block">DRUG INTERACTIONS & WARNINGS</span>
+                                        <p class="text-slate-400 italic">No medications currently active in scanner analysis.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 7: FAMILY HEALTH DASHBOARD -->
+                    <div id="tab-family" class="hidden space-y-6">
+                        <div class="glass-panel rounded-2xl p-6">
+                            <h2 class="text-lg font-bold tracking-tight text-white mb-2">Family Health Dashboard</h2>
+                            <p class="text-slate-400 text-sm mb-6">Manage synchronized health twins for your household members.</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="glass-card p-5 rounded-xl border border-white/5 space-y-4">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold font-mono text-sm text-primary">JD</div>
+                                            <div>
+                                                <h4 class="text-sm font-bold text-white">John Doe (You)</h4>
+                                                <span class="text-[10px] text-slate-500 font-mono">Age: 42</span>
+                                            </div>
+                                        </div>
+                                        <span class="bg-primary/10 text-primary border border-primary/20 text-[9px] font-mono px-2 py-0.5 rounded">88/100</span>
+                                    </div>
+                                    <div class="text-[11px] font-mono text-slate-400 space-y-1">
+                                        <div>Heart Status: <strong class="text-white">Optimal</strong></div>
+                                        <div>Medication: <strong class="text-white">Active (3 tracked)</strong></div>
+                                    </div>
+                                    <button onclick="toggleTab('dashboard')" class="w-full py-2 bg-white/5 hover:bg-white/10 text-slate-200 text-xs font-mono rounded-lg transition-all">
+                                        View Twin Core
+                                    </button>
+                                </div>
+
+                                <div class="glass-card p-5 rounded-xl border border-white/5 space-y-4">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold font-mono text-sm text-yellow-400">MD</div>
+                                            <div>
+                                                <h4 class="text-sm font-bold text-white">Mary Doe</h4>
+                                                <span class="text-[10px] text-slate-500 font-mono">Age: 38 (Spouse)</span>
+                                            </div>
+                                        </div>
+                                        <span class="bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 text-[9px] font-mono px-2 py-0.5 rounded">74/100</span>
+                                    </div>
+                                    <div class="text-[11px] font-mono text-slate-400 space-y-1">
+                                        <div>Heart Status: <strong class="text-yellow-400">Mild Stress</strong></div>
+                                        <div>Medication: <strong class="text-white">Active (1 tracked)</strong></div>
+                                    </div>
+                                    <button class="w-full py-2 bg-white/5 hover:bg-white/10 text-slate-200 text-xs font-mono rounded-lg transition-all">
+                                        View Twin Core
+                                    </button>
+                                </div>
+
+                                <div class="glass-card p-5 rounded-xl border border-white/5 space-y-4">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold font-mono text-sm text-accentRed">PD</div>
+                                            <div>
+                                                <h4 class="text-sm font-bold text-white">Philip Doe</h4>
+                                                <span class="text-[10px] text-slate-500 font-mono">Age: 68 (Parent)</span>
+                                            </div>
+                                        </div>
+                                        <span class="bg-accentRed/10 text-accentRed border border-accentRed/20 text-[9px] font-mono px-2 py-0.5 rounded">62/100</span>
+                                    </div>
+                                    <div class="text-[11px] font-mono text-slate-400 space-y-1">
+                                        <div>Heart Status: <strong class="text-accentRed">High Load</strong></div>
+                                        <div>Medication: <strong class="text-white">Active (4 tracked)</strong></div>
+                                    </div>
+                                    <button class="w-full py-2 bg-white/5 hover:bg-white/10 text-slate-200 text-xs font-mono rounded-lg transition-all">
+                                        View Twin Core
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 8: MULTILINGUAL ASSISTANT -->
+                    <div id="tab-assistant" class="hidden space-y-6">
+                        <div class="glass-panel rounded-2xl p-6">
+                            <div class="flex justify-between items-center border-b border-white/5 pb-4 mb-4">
+                                <div>
+                                    <h2 class="text-lg font-bold tracking-tight text-white">Multilingual Medical Explainer</h2>
+                                    <span class="text-xs text-slate-500 font-mono">Interactive medical-jargon translator</span>
+                                </div>
+                                <select id="assistant-lang" onchange="changeAssistantLanguage()" class="bg-slate-900 border border-white/10 text-xs font-mono rounded-lg focus:outline-none focus:border-primary text-slate-300">
+                                    <option value="en">English</option>
+                                    <option value="hi">Hindi (हिन्दी)</option>
+                                    <option value="te">Telugu (తెలుగు)</option>
+                                    <option value="es">Spanish (Español)</option>
+                                    <option value="ar">Arabic (العربية)</option>
+                                </select>
+                            </div>
+
+                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                                <div class="lg:col-span-8 flex flex-col justify-between border border-white/5 bg-slate-950/40 rounded-xl p-4 min-h-[300px]">
+                                    <div class="space-y-4 flex-grow overflow-y-auto max-h-64 pr-2 text-xs" id="chat-messages">
+                                        <div class="flex items-start gap-3">
+                                            <div class="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold">AI</div>
+                                            <div class="bg-white/5 border border-white/5 p-3 rounded-xl max-w-md">
+                                                <p class="text-slate-300" id="assistant-greet">Hello John. I am your Guardian AI translator. Upload a report or ask me to explain any clinical terms.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex gap-2 mt-4 pt-4 border-t border-white/5">
+                                        <input type="text" id="chat-input" placeholder="Ask about Atorvastatin, lipids, deep sleep..." class="flex-grow bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-primary"/>
+                                        <button onclick="sendChatMessage()" class="p-2.5 bg-primary text-slate-950 rounded-xl hover:bg-primary/95 active:scale-95 transition-all">
+                                            <span class="material-symbols-outlined text-lg block">send</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="lg:col-span-4 glass-card p-5 rounded-xl border border-white/5 flex flex-col justify-between text-center min-h-[300px]">
+                                    <div>
+                                        <span class="text-[10px] font-mono text-slate-400 block uppercase mb-1">Voice Input Simulator</span>
+                                        <p class="text-xs text-slate-500">Click to simulate clinical voice interrogation</p>
+                                    </div>
+
+                                    <div class="flex flex-col items-center justify-center my-6">
+                                        <button onclick="toggleVoiceRecording()" id="voice-btn" class="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary hover:bg-primary/20 active:scale-95 transition-all">
+                                            <span class="material-symbols-outlined text-3xl">mic</span>
+                                        </button>
+                                        <div id="speech-wave" class="flex items-center gap-1 mt-4 opacity-0 transition-opacity">
+                                            <div class="w-1 h-4 bg-primary rounded animate-bounce"></div>
+                                            <div class="w-1 h-6 bg-primary rounded animate-bounce" style="animation-delay: 0.1s"></div>
+                                            <div class="w-1 h-3 bg-primary rounded animate-bounce" style="animation-delay: 0.2s"></div>
+                                            <div class="w-1 h-5 bg-primary rounded animate-bounce" style="animation-delay: 0.3s"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="font-mono text-[9px] text-slate-500" id="speech-status">
+                                        Microphone Idle
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 9: EMERGENCY SOS MODE -->
+                    <div id="tab-emergency" class="hidden space-y-6">
+                        <div class="bg-gradient-to-b from-accentRed/30 via-accentRed/5 to-slate-950 border border-accentRed/30 rounded-2xl p-8 lg:p-12 text-center relative overflow-hidden">
+                            <div class="absolute top-0 inset-x-0 h-1 bg-accentRed shadow-[0_0_20px_#ef4444]"></div>
+
+                            <div class="max-w-2xl mx-auto flex flex-col items-center gap-6">
+                                <span class="bg-accentRed text-white px-4 py-1.5 rounded-full font-mono text-xs font-bold tracking-wider animate-pulse flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm">emergency</span> EMERGENCY VIGILANCE ROUTING ACTIVE
+                                </span>
+                                
+                                <h1 class="text-3xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                                    Paramedic SOS Health Card
+                                </h1>
+                                <p class="text-slate-400 text-sm max-w-lg">
+                                    This profile bypasses authentication during life-safety alerts, displaying vital signs and historical anomalies to emergency services instantly.
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-xl text-left bg-slate-950/80 border border-accentRed/20 p-6 rounded-2xl relative mt-4">
+                                    <div class="space-y-4">
+                                        <div>
+                                            <span class="text-[9px] font-mono text-slate-500 uppercase">Blood Group</span>
+                                            <span class="text-3xl font-extrabold text-accentRed block">O Positive (O+)</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-[9px] font-mono text-slate-500 uppercase">Known Allergies</span>
+                                            <span class="text-sm font-semibold text-white block">Penicillin, Peanuts</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-[9px] font-mono text-slate-500 uppercase">Active Conditions</span>
+                                            <span class="text-sm font-semibold text-white block">Mild Hypertension</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex flex-col items-center justify-center border-l border-white/5 pl-6">
+                                        <div class="bg-white p-2.5 rounded-xl shadow-md mb-2">
+                                            <img alt="Emergency QR Code" class="w-28 h-28 grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxCbUX3kJtIyW8gvRv95itMS611h7zI-cMG-y2FiuYyZPvL0fs_D8lPjQEP_6E_gcSYHNLjbVk-9QL5o0mnScWkavZo3R36Zgn1aIc20ju7Zh1PJj3yBazrydcKNkxMXcTDeUMd6VOaTji_QGOsoHI0jubZLkE0bOY7acRFneaqS2hYqXcQ2rvoNECcbfMQhGDVbgw1yS20aQS2_nl9AUsjAywwL9LsKRmTKtEtLd5jkacRbbDL-9_Jk0dDovOdhpqfFf1yELY5w"/>
+                                        </div>
+                                        <span class="text-[8px] font-mono text-slate-500">Scan for Full HIPAA Record</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-wrap gap-4 mt-6">
+                                    <a href="../emergency_mode_instant_health_card/code.html" class="px-6 py-3 bg-accentRed hover:bg-accentRed/90 text-white font-bold rounded-xl text-sm transition-all shadow-lg shadow-accentRed/20 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-lg">picture_as_pdf</span>
+                                        Open StandaloneSOS Card
+                                    </a>
+                                    <button class="px-6 py-3 bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200 font-semibold rounded-xl text-sm transition-all flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-lg">share</span>
+                                        Share Emergency Lockscreen
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <footer class="w-full pt-8 border-t border-white/5 mt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-mono text-slate-600">
+                <p>© 2026 HealthTwin Guardian AI. Enterprise Clinical Sandbox.</p>
+                <div class="flex gap-4">
+                    <a class="hover:text-primary transition-colors" href="#">Security Core</a>
+                    <a class="hover:text-primary transition-colors" href="#">Medical Disclaimer</a>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        function toggleTab(tabId) {
+            const tabs = ['dashboard', 'bodymap', 'swarm', 'command', 'analyzer', 'scanner', 'family', 'assistant', 'emergency'];
+            tabs.forEach(id => {
+                const element = document.getElementById(`tab-${id}`);
+                if (element) element.classList.add('hidden');
+                
+                const btn = document.getElementById(`btn-${id}`);
+                if (btn) {
+                    btn.classList.remove('bg-primary/10', 'text-primary', 'border-primary/20');
+                    btn.classList.add('text-slate-400');
+                }
+            });
+
+            const targetElement = document.getElementById(`tab-${tabId}`);
+            if (targetElement) targetElement.classList.remove('hidden');
+
+            const targetBtn = document.getElementById(`btn-${tabId}`);
+            if (targetBtn) {
+                targetBtn.classList.remove('text-slate-400');
+                targetBtn.classList.add('bg-primary/10', 'text-primary', 'border-primary/20');
+            }
+
+            if (isSimulatorActive) {
+                syncMobileSimView(tabId);
+            }
+        }
+
+        const organDetails = {
+            brain: {
+                title: "Brain (Cerebral Cortex)",
+                status: "OPTIMAL",
+                color: "text-emerald-400",
+                bg: "bg-emerald-500/10",
+                border: "border-emerald-500/20",
+                desc: "Alpha wave pattern synchronization is 94%. Cortisol markers show minimal stress load. Cognitive endurance limits normal.",
+                risk: "2.4%",
+                stream: "ACTIVE"
+            },
+            lungs: {
+                title: "Lungs (Pulmonary Core)",
+                status: "OPTIMAL",
+                color: "text-emerald-400",
+                bg: "bg-emerald-500/10",
+                border: "border-emerald-500/20",
+                desc: "SpO2 levels maintained at 99%. Oxygenation efficiency matches peak performance profile. Respiratory cadence stable.",
+                risk: "1.8%",
+                stream: "ACTIVE"
+            },
+            heart: {
+                title: "Heart (Myocardium)",
+                status: "MILD STRESS",
+                color: "text-yellow-400",
+                bg: "bg-yellow-500/10",
+                border: "border-yellow-500/20",
+                desc: "Elevated heart rate variability detected during 02:00-04:00 AM window. Blood pressure parameters indicate slight load.",
+                risk: "14.2%",
+                stream: "VIGILANT"
+            },
+            liver: {
+                title: "Liver (Hepatic Clearance)",
+                status: "OPTIMAL",
+                color: "text-emerald-400",
+                bg: "bg-emerald-500/10",
+                border: "border-emerald-500/20",
+                desc: "Enzyme clearance values (ALT/AST) normal. Metabolic profiling indicates clean waste management metrics.",
+                risk: "3.1%",
+                stream: "ACTIVE"
+            },
+            kidneys: {
+                title: "Kidneys (Renal Filter)",
+                status: "PRIORITY VIGILANCE",
+                color: "text-accentRed",
+                bg: "bg-accentRed/10",
+                border: "border-accentRed/20",
+                desc: "Creatinine clearance markers approaching upper clinical boundary. Filtration metrics signal early dehydration load.",
+                risk: "28.5%",
+                stream: "HIGH ALERT"
+            }
+        };
+
+        function selectOrgan(organKey) {
+            const data = organDetails[organKey];
+            if (!data) return;
+
+            document.getElementById('organ-title').textContent = data.title;
+            document.getElementById('organ-status').textContent = data.status;
+            document.getElementById('organ-status').className = `font-mono text-[10px] px-2 py-0.5 rounded ${data.color} ${data.bg} border ${data.border}`;
+            document.getElementById('organ-desc').textContent = data.desc;
+            document.getElementById('organ-risk').textContent = data.risk;
+            document.getElementById('organ-risk').className = `font-bold ${data.color}`;
+            document.getElementById('organ-stream').textContent = data.stream;
+            document.getElementById('organ-stream').className = `font-bold ${data.color}`;
+        }
+
+        const agentPrompts = {
+            blood: "Analyzing CBC panel markers... Hemoglobin: 15.2 g/dL (normal), Glucose: 104 mg/dL (slightly high)",
+            med: "Checking medications... Atorvastatin 10mg crosschecked against Ibuprofen. No fatal interactions detected.",
+            cardiac: "Heart rate variability: 72 BPM baseline. No myocardial load warnings recorded.",
+            predict: "Compiling 48-hour projection... 94% confidence that metabolic state remains stable.",
+            document: "Parsed Labcorp lipid PDF sheet. Total cholesterol: 210 mg/dL (borderline high)",
+            translation: "System translating clinical terms to Hindi & Telugu for multilingual portal preview.",
+            emergency: "Lockscreen SOS card synchronized with QR link payload: HTGAI-O-POS-PENICILLIN"
+        };
+
+        function queryAgent(agentKey) {
+            const msg = agentPrompts[agentKey];
+            if (!msg) return;
+            const logBox = document.getElementById('swarm-logs');
+            const timeStr = new Date().toLocaleTimeString();
+            logBox.innerHTML += `<p class="text-primary">[${timeStr}] [Query] ${msg}</p>`;
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        function clearSwarmLogs() {
+            document.getElementById('swarm-logs').innerHTML = `<p class="text-slate-500">[System] Log streams cleared.</p>`;
+        }
+
+        function injectSimulatedLog() {
+            const logs = [
+                "[00:46:12] Neural Agent sync: Brain alpha waves coherence 94%",
+                "[00:47:01] Pharmacology Agent check: daily medication schedule synchronized",
+                "[00:48:15] Vitals update: SpO2 levels steady at 99%",
+                "[00:49:03] Swarm check: All 7 sub-agents communicating with core orchestrator"
+            ];
+            const randLog = logs[Math.floor(Math.random() * logs.length)];
+            const logBox = document.getElementById('swarm-logs');
+            logBox.innerHTML += `<p class="text-slate-300">${randLog}</p>`;
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        function simulateReportProcessing() {
+            const loading = document.getElementById('analyzer-loading');
+            const progress = document.getElementById('analyzer-loading-progress');
+            const status = document.getElementById('analyzer-loading-status');
+            const card = document.getElementById('analyzer-results-card');
+
+            loading.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.add('opacity-40');
+            progress.style.width = '0%';
+            status.textContent = 'Uploading laboratory PDF sheet...';
+
+            setTimeout(() => {
+                progress.style.width = '45%';
+                status.textContent = 'Parsing clinical metrics (OCR)...';
+            }, 600);
+
+            setTimeout(() => {
+                progress.style.width = '80%';
+                status.textContent = 'Crosschecking biomarkers with HealthTwin baseline...';
+            }, 1200);
+
+            setTimeout(() => {
+                progress.style.width = '100%';
+                status.textContent = 'Analysis Complete.';
+            }, 1800);
+
+            setTimeout(() => {
+                loading.classList.add('opacity-0', 'pointer-events-none');
+                card.classList.remove('opacity-60', 'opacity-40');
+                
+                document.getElementById('results-meta').textContent = 'Doc Type: Labcorp Comprehensive Panel (Parsed)';
+                document.getElementById('results-badge').textContent = 'ANALYZED';
+                document.getElementById('results-badge').className = 'bg-primary/10 text-primary border border-primary/20 font-mono text-[9px] px-2.5 py-0.5 rounded';
+                
+                document.getElementById('results-fields').innerHTML = `
+                    <div class="flex justify-between items-center p-2.5 bg-emerald-500/5 border border-emerald-500/10 rounded-lg">
+                        <span class="text-slate-300">Fasting Blood Glucose</span>
+                        <span class="text-emerald-400 font-bold">94 mg/dL (Normal)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-2.5 bg-yellow-500/5 border border-yellow-500/10 rounded-lg">
+                        <span class="text-slate-300">Total Cholesterol</span>
+                        <span class="text-yellow-400 font-bold">210 mg/dL (Borderline High)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-2.5 bg-emerald-500/5 border border-emerald-500/10 rounded-lg">
+                        <span class="text-slate-300">HbA1c</span>
+                        <span class="text-emerald-400 font-bold">5.4% (Optimal)</span>
+                    </div>
+                `;
+
+                document.getElementById('results-explanation').innerHTML = `
+                    <span class="text-primary font-bold uppercase block mb-1">AI Explanation</span>
+                    <p class="text-slate-300 leading-relaxed">Your fasting blood sugar and HbA1c are excellent. Total cholesterol is slightly elevated at 210 mg/dL. The cardiac swarm indicates a low cardiovascular risk, but recommends lowering saturated fat intake.</p>
+                `;
+            }, 2100);
+        }
+
+        function loadSampleReport() {
+            simulateReportProcessing();
+        }
+
+        function simulateMedicineScan(medType) {
+            const loading = document.getElementById('scanner-loading');
+            const card = document.getElementById('scanner-results-card');
+
+            loading.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.add('opacity-40');
+
+            setTimeout(() => {
+                loading.classList.add('opacity-0', 'pointer-events-none');
+                card.classList.remove('opacity-60', 'opacity-40');
+
+                if (medType === 'atorvastatin') {
+                    document.getElementById('med-name').textContent = 'Atorvastatin Calcium';
+                    document.getElementById('med-dosage').textContent = 'Dosage: 10mg once daily';
+                    document.getElementById('med-safety-badge').textContent = '96% SAFETY';
+                    document.getElementById('med-safety-badge').className = 'bg-primary/10 text-primary border border-primary/20 font-mono text-[9px] px-2.5 py-0.5 rounded';
+                    document.getElementById('med-purpose').textContent = 'Cardiology / Cholesterol management';
+                    document.getElementById('med-side').textContent = 'Muscle aches, mild headache';
+                    document.getElementById('med-interactions').innerHTML = `
+                        <span class="text-emerald-400 font-bold block mb-1">✓ Interaction Check Cleared</span>
+                        <p class="text-slate-300">No harmful cross-interactions with your current 3 medications (Metformin, Lisinopril, Vitamin D3).</p>
+                    `;
+                } else if (medType === 'ibuprofen') {
+                    document.getElementById('med-name').textContent = 'Ibuprofen';
+                    document.getElementById('med-dosage').textContent = 'Dosage: 400mg as needed';
+                    document.getElementById('med-safety-badge').textContent = 'CRITICAL WARNING';
+                    document.getElementById('med-safety-badge').className = 'bg-accentRed/10 text-accentRed border border-accentRed/20 font-mono text-[9px] px-2.5 py-0.5 rounded animate-pulse';
+                    document.getElementById('med-purpose').textContent = 'Analgesic / Anti-inflammatory';
+                    document.getElementById('med-side').textContent = 'Stomach irritation, kidney strain';
+                    document.getElementById('med-interactions').innerHTML = `
+                        <span class="text-accentRed font-bold block mb-1">⚠️ Moderate Interaction Alert</span>
+                        <p class="text-slate-300">Ibuprofen may interact with Lisinopril (your blood pressure medication), reducing its efficacy and potentially increasing kidney load. Recommend consulting practitioner.</p>
+                    `;
+                }
+            }, 1000);
+        }
+
+        const langGreetings = {
+            en: "Hello John. I am your Guardian AI translator. Ask me to explain any clinical terms.",
+            hi: "नमस्ते जॉन। मैं आपका गार्जियन एआई अनुवादक हूँ। मुझे किसी भी चिकित्सा शब्द को समझाने के लिए कहें।",
+            te: "హలో జాన్. నేను మీ గార్డియన్ AI అనువాదకుడిని. ఏదైనా వైద్య పదాన్ని వివరించమని నన్ను అడగండి.",
+            es: "Hola John. Soy su traductor de IA Guardian. Pídame que le explique cualquier término clínico.",
+            ar: "مرحباً جون. أنا مترجم الذكاء الاصطناعي الحارس الخاص بك. اطلب مني شرح أي مصطلحات طبية."
+        };
+
+        const langReplies = {
+            en: {
+                "default": "Atorvastatin is a statin medication designed to lower LDL cholesterol and protect your coronary arteries from plaque formation.",
+                "hba1c": "HbA1c measures your average blood sugar levels over the past 3 months. A level below 5.7% is considered normal."
+            },
+            hi: {
+                "default": "एटोरवास्टेटिन एक स्टैटिन दवा है जिसे एलडीएल कोलेस्ट्रॉल को कम करने और धमनियों की रक्षा करने के लिए बनाया गया है।",
+                "hba1c": "HbA1c पिछले 3 महीनों में आपके औसत रक्त शर्करा के स्तर को मापता है। 5.7% से नीचे का स्तर सामान्य माना जाता है।"
+            },
+            te: {
+                "default": "అటోర్వాస్టాటిన్ అనేది LDL కొలెస్ట్రాల్‌ను తగ్గించడానికి మరియు మీ ధమనులను రక్షించడానికి రూపొందించబడిన ఒక స్టాటిൻ ఔషధం.",
+                "hba1c": "HbA1c అనేది గత 3 నెలల్లో మీ సగటు రక్తంలో చక్కెర స్థాయిలను కొలుస్తుంది. 5.7% కంటే తక్కువ స్థాయి సాధారణమైనదిగా పరిగణించబడుతుంది."
+            },
+            es: {
+                "default": "La atorvastatina es un medicamento de estatina diseñado para reducir el colesterol LDL y proteger sus arterias coronarias.",
+                "hba1c": "La HbA1c mide sus niveles promedio de azúcar en sangre durante los últimos 3 meses. Un nivel inferior al 5.7% es normal."
+            },
+            ar: {
+                "default": "أتورفاستاتين هو دواء ستاتين مصمم لخفض الكوليسترول الضار وحماية الشرايين التاجية.",
+                "hba1c": "يقيس HbA1c متوسط مستويات السكر في الدم على مدى الأشهر الثلاثة الماضية. يعتبر المستوى الأقل من 5.7% طبيعيًا."
+            }
+        };
+
+        function changeAssistantLanguage() {
+            const lang = document.getElementById('assistant-lang').value;
+            document.getElementById('assistant-greet').textContent = langGreetings[lang] || langGreetings.en;
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim().toLowerCase();
+            if (!text) return;
+
+            const chatBox = document.getElementById('chat-messages');
+            
+            chatBox.innerHTML += `
+                <div class="flex items-start gap-3 justify-end">
+                    <div class="bg-primary/20 border border-primary/20 p-3 rounded-xl max-w-md text-slate-200">
+                        <p>${input.value}</p>
+                    </div>
+                    <div class="w-7 h-7 rounded-lg bg-primary/20 flex items-center justify-center text-primary font-bold">U</div>
+                </div>
+            `;
+
+            botReply(text);
+        }
+
+        function botReply(text) {
+            const chatBox = document.getElementById('chat-messages');
+            const lang = document.getElementById('assistant-lang').value;
+            let reply = langReplies[lang]?.default || langReplies.en.default;
+            if (text.includes('hba1c') || text.includes('glucose') || text.includes('sugar')) {
+                reply = langReplies[lang]?.hba1c || langReplies.en.hba1c;
+            }
+
+            setTimeout(() => {
+                chatBox.innerHTML += `
+                    <div class="flex items-start gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold">AI</div>
+                        <div class="bg-white/5 border border-white/5 p-3 rounded-xl max-w-md">
+                            <p class="text-slate-300">${reply}</p>
+                        </div>
+                    </div>
+                `;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 800);
+
+            document.getElementById('chat-input').value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        let isRecording = false;
+        function toggleVoiceRecording() {
+            isRecording = !isRecording;
+            const btn = document.getElementById('voice-btn');
+            const wave = document.getElementById('speech-wave');
+            const status = document.getElementById('speech-status');
+
+            if (isRecording) {
+                btn.className = "w-16 h-16 rounded-full bg-accentRed/10 border border-accentRed/20 flex items-center justify-center text-accentRed hover:bg-accentRed/20 animate-pulse active:scale-95 transition-all";
+                wave.classList.remove('opacity-0');
+                status.textContent = "Recording... Say 'Explain my blood report'";
+                
+                setTimeout(() => {
+                    if (isRecording) {
+                        document.getElementById('chat-input').value = "Explain my blood report";
+                        toggleVoiceRecording();
+                        botReply("explain my blood report");
+                    }
+                }, 3000);
+            } else {
+                btn.className = "w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary hover:bg-primary/20 active:scale-95 transition-all";
+                wave.classList.add('opacity-0');
+                status.textContent = "Microphone Idle";
+            }
+        }
+
+        let isSimulatorActive = false;
+        function toggleMobileSimulator() {
+            isSimulatorActive = !isSimulatorActive;
+            const pane = document.getElementById('workspace-pane');
+            const toggleBtn = document.getElementById('simulator-toggle');
+            const toggleText = document.getElementById('simulator-text');
+            const wrapper = document.getElementById('simulator-wrapper');
+
+            if (isSimulatorActive) {
+                toggleBtn.className = "w-full py-2 bg-primary text-slate-950 rounded-xl font-mono text-[10px] font-bold flex items-center justify-center gap-2";
+                toggleText.textContent = "Disable Mobile View";
+                
+                const gridHtml = wrapper.innerHTML;
+                const activeTab = document.querySelector('#dashboard-grid > div:not(.hidden)').id.replace('tab-', '');
+
+                wrapper.innerHTML = `
+                    <div class="relative w-[340px] h-[660px] bg-slate-950 border-[6px] border-slate-800 rounded-[36px] shadow-2xl overflow-hidden flex flex-col justify-between" id="mobile-phone-frame">
+                        <div class="absolute top-0 inset-x-0 h-5 flex justify-center z-50">
+                            <div class="w-28 h-4 bg-slate-800 rounded-b-xl"></div>
+                        </div>
+
+                        <div class="h-10 bg-darkBg border-b border-white/5 flex items-center justify-between px-5 pt-3 text-[10px] font-mono text-slate-500 z-10">
+                            <span>00:49</span>
+                            <div class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-xs">signal_cellular_alt</span>
+                                <span class="material-symbols-outlined text-xs">battery_5_bar</span>
+                            </div>
+                        </div>
+
+                        <div class="flex-grow overflow-y-auto px-4 py-3 bg-darkBg text-slate-100 z-10" id="mobile-workspace">
+                            ${gridHtml}
+                        </div>
+
+                        <div class="h-12 bg-slate-900 border-t border-white/5 flex items-center justify-around px-2 z-10 text-[9px] font-mono text-slate-400">
+                            <button onclick="syncMobileSimView('dashboard')" class="flex flex-col items-center gap-0.5 text-primary">
+                                <span class="material-symbols-outlined text-base">dashboard</span>
+                                <span>Home</span>
+                            </button>
+                            <button onclick="syncMobileSimView('scanner')" class="flex flex-col items-center gap-0.5">
+                                <span class="material-symbols-outlined text-base">qr_code_scanner</span>
+                                <span>Scan</span>
+                            </button>
+                            <button onclick="syncMobileSimView('emergency')" class="flex flex-col items-center gap-0.5 text-accentRed">
+                                <span class="material-symbols-outlined text-base">emergency</span>
+                                <span>SOS</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                syncMobileSimView(activeTab);
+            } else {
+                toggleBtn.className = "w-full py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-mono text-[10px] text-slate-300 flex items-center justify-center gap-2";
+                toggleText.textContent = "Enable Mobile View";
+                restoreStandardGrid();
+            }
+        }
+
+        function syncMobileSimView(tabId) {
+            const container = document.getElementById('mobile-phone-frame');
+            if (!container) return;
+
+            const tabs = ['dashboard', 'bodymap', 'swarm', 'command', 'analyzer', 'scanner', 'family', 'assistant', 'emergency'];
+            tabs.forEach(id => {
+                const element = container.querySelector(`#tab-${id}`);
+                if (element) element.classList.add('hidden');
+            });
+
+            const target = container.querySelector(`#tab-${tabId}`);
+            if (target) target.classList.remove('hidden');
+        }
+
+        function restoreStandardGrid() {
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>

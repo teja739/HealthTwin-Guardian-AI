@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthTwin Guardian AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #101820;
+      --muted: #53616f;
+      --surface: #f7fbff;
+      --panel: #ffffff;
+      --line: #dbe7ee;
+      --teal: #087f72;
+      --teal-bright: #14b8a6;
+      --blue: #2563eb;
+      --red: #dc2626;
+      --navy: #0b1220;
+      --amber: #b45309;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--surface);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 24;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(219, 231, 238, 0.85);
+      background: rgba(247, 251, 255, 0.88);
+      backdrop-filter: blur(18px);
+    }
+
+    .topbar-inner {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(135deg, var(--teal), var(--blue));
+      box-shadow: 0 12px 28px rgba(8, 127, 114, 0.22);
+      flex: 0 0 auto;
+    }
+
+    .brand-title {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .brand-title strong {
+      font-size: 16px;
+      line-height: 1.1;
+    }
+
+    .brand-title span {
+      color: var(--teal);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .nav a:hover {
+      color: var(--teal);
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .button {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 0 16px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button.primary {
+      background: var(--ink);
+      color: white;
+      box-shadow: 0 12px 28px rgba(16, 24, 32, 0.18);
+    }
+
+    .button.secondary {
+      border-color: var(--line);
+      background: white;
+      color: var(--ink);
+    }
+
+    .button.alert {
+      background: var(--red);
+      color: white;
+    }
+
+    .hero {
+      padding: 48px 0 28px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.86fr) minmax(420px, 1.14fr);
+      gap: 36px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 10px;
+      border: 1px solid rgba(8, 127, 114, 0.18);
+      border-radius: 999px;
+      background: rgba(20, 184, 166, 0.08);
+      color: var(--teal);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--teal-bright);
+      box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.36);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.36); }
+      70% { box-shadow: 0 0 0 10px rgba(20, 184, 166, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0); }
+    }
+
+    h1 {
+      margin: 18px 0 18px;
+      max-width: 720px;
+      font-size: clamp(36px, 5vw, 68px);
+      line-height: 1.03;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 650px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 30px;
+      max-width: 610px;
+    }
+
+    .metric {
+      min-height: 96px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+    }
+
+    .metric strong {
+      display: block;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 22px;
+      letter-spacing: 0;
+      color: var(--ink);
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .preview {
+      position: relative;
+      border: 1px solid rgba(16, 24, 32, 0.12);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--navy);
+      box-shadow: 0 26px 70px rgba(16, 24, 32, 0.22);
+    }
+
+    .preview-toolbar {
+      min-height: 44px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #a7b4c4;
+      background: #0e1729;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .preview img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .status-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: #0e1729;
+    }
+
+    .status-item {
+      padding: 14px;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .status-item:last-child {
+      border-right: 0;
+    }
+
+    .status-item span {
+      display: block;
+      color: #7f8ea3;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .status-item strong {
+      display: block;
+      margin-top: 5px;
+      color: white;
+      font-size: 14px;
+    }
+
+    section {
+      padding: 56px 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 22px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(26px, 3vw, 38px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      max-width: 500px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(8, 127, 114, 0.32);
+      box-shadow: 0 16px 34px rgba(16, 24, 32, 0.08);
+    }
+
+    .card-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: rgba(20, 184, 166, 0.1);
+      color: var(--teal);
+    }
+
+    .card h3 {
+      margin: 18px 0 8px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .card-link {
+      margin-top: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--teal);
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .showcase {
+      background: white;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .clinical-panel {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+    }
+
+    .clinical-panel h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+
+    .clinical-panel p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .checks {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .check {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: white;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-weight: 650;
+      font-size: 14px;
+    }
+
+    .check .material-symbols-outlined {
+      color: var(--teal);
+      flex: 0 0 auto;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .screen-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--navy);
+    }
+
+    .screen-card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .screen-card span {
+      display: block;
+      padding: 11px 12px;
+      color: #d9e3ee;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .flow-step {
+      min-height: 148px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+    }
+
+    .flow-step strong {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--teal);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      letter-spacing: 0;
+    }
+
+    .flow-step span {
+      display: block;
+      color: var(--ink);
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .flow-step p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--line);
+      background: #edf5f9;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 980px) {
+      .nav {
+        display: none;
+      }
+
+      .hero-grid,
+      .showcase-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .flow {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .topbar-inner {
+        height: auto;
+        padding: 12px 0;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .actions {
+        width: 100%;
+      }
+
+      .actions .button {
+        flex: 1;
+      }
+
+      .hero {
+        padding-top: 30px;
+      }
+
+      .metrics,
+      .status-strip,
+      .cards,
+      .image-grid,
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .metric,
+      .card,
+      .flow-step {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="index.html" aria-label="HealthTwin Guardian AI home">
+        <span class="brand-mark">
+          <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">shield_heart</span>
+        </span>
+        <span class="brand-title">
+          <strong>HealthTwin Guardian AI</strong>
+          <span>Digital health twin</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="#demo">Demo</a>
+        <a href="#modules">Modules</a>
+        <a href="#workflow">Workflow</a>
+      </nav>
+      <div class="actions">
+        <a class="button secondary" href="secure_login_healthtwin_guardian_ai/code.html">
+          <span class="material-symbols-outlined">login</span>
+          Sign In
+        </a>
+        <a class="button primary" href="interactive_ai_health_twin_dashboard/code.html">
+          <span class="material-symbols-outlined">monitoring</span>
+          Launch App
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <span class="eyebrow"><span class="pulse"></span> AI guardian monitoring suite</span>
+          <h1>Your AI health twin, ready to protect every health decision.</h1>
+          <p class="lead">
+            HealthTwin Guardian AI combines a synchronized biometric dashboard, agent-based medical explanation,
+            medicine safety checks, and a paramedic-ready emergency card in one static demo experience.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="interactive_ai_health_twin_dashboard/code.html">
+              <span class="material-symbols-outlined">dashboard</span>
+              Open Dashboard
+            </a>
+            <a class="button alert" href="emergency_mode_instant_health_card/code.html">
+              <span class="material-symbols-outlined">emergency</span>
+              View SOS Card
+            </a>
+            <a class="button secondary" href="landing_page_healthtwin_guardian_ai/code.html">
+              <span class="material-symbols-outlined">travel_explore</span>
+              Original Landing
+            </a>
+          </div>
+          <div class="metrics" aria-label="HealthTwin demo metrics">
+            <div class="metric">
+              <strong>98.4%</strong>
+              <span>Twin synchronization across demo biometrics</span>
+            </div>
+            <div class="metric">
+              <strong>7</strong>
+              <span>Specialized AI agents in the monitoring swarm</span>
+            </div>
+            <div class="metric">
+              <strong>&lt;3s</strong>
+              <span>Emergency health-card access target</span>
+            </div>
+          </div>
+        </div>
+
+        <a class="preview" href="interactive_ai_health_twin_dashboard/code.html" aria-label="Open HealthTwin dashboard">
+          <div class="preview-toolbar">
+            <span>GUARDIAN_DASHBOARD / LIVE</span>
+            <span>SECURE</span>
+          </div>
+          <img src="interactive_ai_health_twin_dashboard/screen.png" alt="HealthTwin Guardian AI dashboard preview" />
+          <div class="status-strip">
+            <div class="status-item">
+              <span>Health Index</span>
+              <strong>88/100</strong>
+            </div>
+            <div class="status-item">
+              <span>Cardiac</span>
+              <strong>72 BPM</strong>
+            </div>
+            <div class="status-item">
+              <span>Risk</span>
+              <strong>Low</strong>
+            </div>
+            <div class="status-item">
+              <span>Agents</span>
+              <strong>Active</strong>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section id="modules">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>Demo Modules</h2>
+          </div>
+          <p>Explore the core clinical workflows in the Guardian suite, from proactive monitoring to emergency handoff.</p>
+        </div>
+
+        <div class="cards">
+          <a class="card" href="interactive_ai_health_twin_dashboard/code.html">
+            <div>
+              <span class="card-icon"><span class="material-symbols-outlined">monitoring</span></span>
+              <h3>Interactive Dashboard</h3>
+              <p>Vitals, body risk map, family monitoring, report simulation, scanner, chat, and SOS controls.</p>
+            </div>
+            <span class="card-link">Open dashboard <span class="material-symbols-outlined">arrow_forward</span></span>
+          </a>
+
+          <a class="card" href="medical_report_explainer_blood_panel/code.html">
+            <div>
+              <span class="card-icon"><span class="material-symbols-outlined">clinical_notes</span></span>
+              <h3>Blood Panel Explainer</h3>
+              <p>Interactive biomarker sliders translate lab values into a plain-language Health Twin score.</p>
+            </div>
+            <span class="card-link">Explain report <span class="material-symbols-outlined">arrow_forward</span></span>
+          </a>
+
+          <a class="card" href="emergency_mode_instant_health_card/code.html">
+            <div>
+              <span class="card-icon" style="background:rgba(220,38,38,.1);color:var(--red);"><span class="material-symbols-outlined">emergency</span></span>
+              <h3>Emergency SOS Card</h3>
+              <p>Paramedic-first identity, allergy, medication, contact, and QR-access layout.</p>
+            </div>
+            <span class="card-link" style="color:var(--red);">Open SOS <span class="material-symbols-outlined">arrow_forward</span></span>
+          </a>
+
+          <a class="card" href="secure_login_healthtwin_guardian_ai/code.html">
+            <div>
+              <span class="card-icon"><span class="material-symbols-outlined">verified_user</span></span>
+              <h3>Secure Login Flow</h3>
+              <p>Clinical sign-in with password, biometric simulation, and a 2FA setup handoff.</p>
+            </div>
+            <span class="card-link">Start auth <span class="material-symbols-outlined">arrow_forward</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo" class="showcase">
+      <div class="shell showcase-grid">
+        <div class="clinical-panel">
+          <h3>Built Around Clinical Urgency</h3>
+          <p>
+            The demo keeps the interface dense enough for repeated use while still making high-risk actions obvious:
+            emergency mode, report analysis, medicine scanning, and agent activity are all reachable without hunting.
+          </p>
+          <div class="checks">
+            <div class="check"><span class="material-symbols-outlined">check_circle</span> Digital twin status and biometric trends</div>
+            <div class="check"><span class="material-symbols-outlined">check_circle</span> Medication safety and interaction simulation</div>
+            <div class="check"><span class="material-symbols-outlined">check_circle</span> Emergency profile built for first responders</div>
+            <div class="check"><span class="material-symbols-outlined">check_circle</span> Multilingual explanation assistant demo</div>
+          </div>
+        </div>
+
+        <div class="image-grid" aria-label="HealthTwin screen previews">
+          <a class="screen-card" href="landing_page_healthtwin_guardian_ai/code.html">
+            <img src="landing_page_healthtwin_guardian_ai/screen.png" alt="HealthTwin landing page preview" />
+            <span>Landing page</span>
+          </a>
+          <a class="screen-card" href="secure_login_healthtwin_guardian_ai/code.html">
+            <img src="secure_login_healthtwin_guardian_ai/screen.png" alt="HealthTwin secure login preview" />
+            <span>Secure login</span>
+          </a>
+          <a class="screen-card" href="medical_report_explainer_blood_panel/code.html">
+            <img src="medical_report_explainer_blood_panel/screen.png" alt="Blood panel explainer preview" />
+            <span>Report explainer</span>
+          </a>
+          <a class="screen-card" href="emergency_mode_instant_health_card/code.html">
+            <img src="emergency_mode_instant_health_card/screen.png" alt="Emergency SOS card preview" />
+            <span>Emergency mode</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="workflow">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>Website Flow</h2>
+          </div>
+          <p>A complete product journey connects public discovery, clinical authentication, live monitoring, explanation, and emergency response.</p>
+        </div>
+
+        <div class="flow">
+          <div class="flow-step">
+            <strong>01</strong>
+            <span>Entry</span>
+            <p>Start with the product overview and choose the clinical path.</p>
+          </div>
+          <div class="flow-step">
+            <strong>02</strong>
+            <span>Authentication</span>
+            <p>Use the clinical login and 2FA screens for the security story.</p>
+          </div>
+          <div class="flow-step">
+            <strong>03</strong>
+            <span>Dashboard</span>
+            <p>Inspect synchronized vitals, risk panels, family status, and agents.</p>
+          </div>
+          <div class="flow-step">
+            <strong>04</strong>
+            <span>Explanation</span>
+            <p>Adjust lab values and watch the health score change.</p>
+          </div>
+          <div class="flow-step">
+            <strong>05</strong>
+            <span>Emergency</span>
+            <p>Switch to the paramedic-facing SOS card when urgency matters.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell footer-inner">
+      <span>&copy; 2026 HealthTwin Guardian AI. Clinical intelligence demo environment.</span>
+      <span>Digital twin monitoring, explanation, and emergency response.</span>
+    </div>
+  </footer>
+</body>
+</html>

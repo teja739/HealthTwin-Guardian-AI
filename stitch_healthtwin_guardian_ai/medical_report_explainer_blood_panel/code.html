@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Biomarker Interactive Explainer | HealthTwin Guardian AI</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .mesh-gradient {
+            background-color: #060913;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(20, 184, 166, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(239, 68, 68, 0.06) 0px, transparent 50%);
+        }
+        .glass-panel {
+            background: rgba(13, 20, 35, 0.65);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .input-glow:focus {
+            box-shadow: 0 0 10px rgba(20, 184, 166, 0.3);
+            border-color: #14b8a6;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#14b8a6", // Life Teal
+                        secondary: "#3b82f6", // Digital Blue
+                        darkBg: "#060913",
+                        accentRed: "#ef4444" // Emergency Red
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="mesh-gradient text-slate-100 min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <!-- Top Navigation Header -->
+    <header class="w-full h-20 px-6 lg:px-12 flex justify-between items-center z-10 border-b border-white/5 bg-darkBg/30 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <a href="../landing_page_healthtwin_guardian_ai/code.html" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/20">
+                <span class="material-symbols-outlined text-white text-2xl" style="font-variation-settings: 'FILL' 1;">shield_heart</span>
+            </a>
+            <div>
+                <span class="font-bold text-lg tracking-tight text-white font-mono">LAB EXPLAINER</span>
+                <span class="text-[10px] font-mono block text-primary font-semibold tracking-wider">HealthTwin Guardian AI</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <a class="text-xs font-mono text-slate-400 hover:text-white transition-colors" href="../interactive_ai_health_twin_dashboard/code.html">Go to Dashboard</a>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-grow max-w-[1200px] mx-auto w-full px-6 py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left: Interactive sliders for adjusting values -->
+        <div class="lg:col-span-7 space-y-6">
+            <div class="glass-panel rounded-2xl p-6 lg:p-8 space-y-8">
+                <div>
+                    <span class="text-[10px] font-mono text-primary uppercase font-bold tracking-wider">Simulation Core</span>
+                    <h2 class="text-2xl font-bold tracking-tight text-white mt-1">Biomarker Sandbox</h2>
+                    <p class="text-slate-400 text-sm mt-1">Adjust sliders to simulate how changes in individual blood parameters dynamically affect your overall Health Twin index.</p>
+                </div>
+
+                <!-- Slider 1 -->
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center font-mono text-xs">
+                        <span class="text-slate-300">Fasting Blood Glucose</span>
+                        <span id="val-glucose" class="text-primary font-bold">94 mg/dL</span>
+                    </div>
+                    <input type="range" id="slide-glucose" min="70" max="250" value="94" oninput="updateSimulation()" class="w-full h-1.5 bg-white/5 rounded-lg appearance-none cursor-pointer accent-primary"/>
+                    <div class="flex justify-between text-[9px] font-mono text-slate-500">
+                        <span>70 mg/dL (Hypo)</span>
+                        <span>100 mg/dL (Normal limit)</span>
+                        <span>250 mg/dL (Hyper)</span>
+                    </div>
+                </div>
+
+                <!-- Slider 2 -->
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center font-mono text-xs">
+                        <span class="text-slate-300">Total Cholesterol</span>
+                        <span id="val-chol" class="text-primary font-bold">210 mg/dL</span>
+                    </div>
+                    <input type="range" id="slide-chol" min="130" max="350" value="210" oninput="updateSimulation()" class="w-full h-1.5 bg-white/5 rounded-lg appearance-none cursor-pointer accent-primary"/>
+                    <div class="flex justify-between text-[9px] font-mono text-slate-500">
+                        <span>130 mg/dL (Low)</span>
+                        <span>200 mg/dL (Normal limit)</span>
+                        <span>350 mg/dL (High risk)</span>
+                    </div>
+                </div>
+
+                <!-- Slider 3 -->
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center font-mono text-xs">
+                        <span class="text-slate-300">HbA1c (Glycated Hemoglobin)</span>
+                        <span id="val-hba1c" class="text-primary font-bold">5.4%</span>
+                    </div>
+                    <input type="range" id="slide-hba1c" min="4.0" max="12.0" step="0.1" value="5.4" oninput="updateSimulation()" class="w-full h-1.5 bg-white/5 rounded-lg appearance-none cursor-pointer accent-primary"/>
+                    <div class="flex justify-between text-[9px] font-mono text-slate-500">
+                        <span>4.0% (Optimal)</span>
+                        <span>5.7% (Pre-diabetes limit)</span>
+                        <span>12.0% (Severe Diabetic)</span>
+                    </div>
+                </div>
+
+                <!-- Slider 4 -->
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center font-mono text-xs">
+                        <span class="text-slate-300">Hemoglobin</span>
+                        <span id="val-hemo" class="text-primary font-bold">15.2 g/dL</span>
+                    </div>
+                    <input type="range" id="slide-hemo" min="9.0" max="18.0" step="0.1" value="15.2" oninput="updateSimulation()" class="w-full h-1.5 bg-white/5 rounded-lg appearance-none cursor-pointer accent-primary"/>
+                    <div class="flex justify-between text-[9px] font-mono text-slate-500">
+                        <span>9.0 g/dL (Anemic)</span>
+                        <span>13.8 - 17.2 g/dL (Normal male)</span>
+                        <span>18.0 g/dL (High)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Diagnostic HUD reflecting alterations -->
+        <div class="lg:col-span-5 space-y-6">
+            <div class="glass-panel rounded-2xl p-6 flex flex-col justify-between min-h-[350px]">
+                <div class="border-b border-white/5 pb-4 mb-4">
+                    <span class="text-[10px] font-mono text-slate-500 block uppercase">Real-Time Twin Status</span>
+                    <h3 class="text-sm font-bold text-white font-mono uppercase mt-1">Live Simulation Output</h3>
+                </div>
+
+                <!-- Dynamic Health index counter -->
+                <div class="flex items-center gap-6 my-4">
+                    <div class="relative w-24 h-24 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-full h-full transform -rotate-90">
+                            <circle class="text-white/5" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-width="6"></circle>
+                            <circle id="score-circle" class="text-primary" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251" stroke-dashoffset="30" stroke-width="6"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span id="score-text" class="text-2xl font-extrabold text-white">88</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-xs font-mono text-slate-400">Twin Health Index</span>
+                        <h4 id="score-status" class="text-lg font-bold text-primary">Optimal Biometrics</h4>
+                        <span id="alert-badge" class="bg-primary/10 text-primary border border-primary/20 text-[9px] font-mono px-2 py-0.5 rounded mt-1 inline-block">SECURE</span>
+                    </div>
+                </div>
+
+                <!-- Custom AI explanations based on slider state -->
+                <div class="bg-white/5 border border-white/5 p-4 rounded-xl space-y-3 font-mono text-xs">
+                    <span class="text-slate-500 block">AI Jargon-Free Explanation</span>
+                    <p id="explain-box" class="text-slate-300 leading-relaxed">
+                        All biomarkers are within safety margins. Total cholesterol is slightly elevated at 210 mg/dL, which is borderline high but manageable through clean dietary habits.
+                    </p>
+                </div>
+
+                <div class="pt-4 border-t border-white/5 font-mono text-[9px] text-slate-500 flex justify-between">
+                    <span>Baseline Sync: John Doe</span>
+                    <span>94% Predict Confidence</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-8 text-center border-t border-white/5 mt-auto">
+        <p class="text-xs text-slate-500 font-mono">
+            © 2026 HealthTwin Guardian AI Inc. Simulation Engine Core v1.9.1. HIPAA Secured Sandbox.
+        </p>
+    </footer>
+
+    <!-- Interactive simulation logic -->
+    <script>
+        function updateSimulation() {
+            const gluc = parseInt(document.getElementById('slide-glucose').value);
+            const chol = parseInt(document.getElementById('slide-chol').value);
+            const hba1c = parseFloat(document.getElementById('slide-hba1c').value);
+            const hemo = parseFloat(document.getElementById('slide-hemo').value);
+
+            // Display values
+            document.getElementById('val-glucose').textContent = `${gluc} mg/dL`;
+            document.getElementById('val-chol').textContent = `${chol} mg/dL`;
+            document.getElementById('val-hba1c').textContent = `${hba1c}%`;
+            document.getElementById('val-hemo').textContent = `${hemo} g/dL`;
+
+            // Calculate overall twin health index
+            let score = 96;
+            
+            // Deduct for high glucose
+            if (gluc > 100) {
+                score -= Math.min(25, (gluc - 100) * 0.15);
+            } else if (gluc < 75) {
+                score -= 10;
+            }
+
+            // Deduct for high cholesterol
+            if (chol > 200) {
+                score -= Math.min(20, (chol - 200) * 0.1);
+            }
+
+            // Deduct for HbA1c
+            if (hba1c > 5.7) {
+                score -= Math.min(30, (hba1c - 5.7) * 4);
+            }
+
+            // Deduct for low hemoglobin
+            if (hemo < 13.5) {
+                score -= Math.min(20, (13.5 - hemo) * 4);
+            }
+
+            score = Math.max(10, Math.round(score));
+
+            // Update score displays
+            document.getElementById('score-text').textContent = score;
+            
+            // Adjust SVG circle stroke-dashoffset
+            // Circumference is 2 * Math.PI * 40 = 251.2
+            const offset = 251 - (251 * (score / 100));
+            document.getElementById('score-circle').style.strokeDashoffset = offset;
+
+            // UI feedback statuses & AI messages
+            const statusLabel = document.getElementById('score-status');
+            const alertBadge = document.getElementById('alert-badge');
+            const explain = document.getElementById('explain-box');
+            const circle = document.getElementById('score-circle');
+
+            if (score >= 85) {
+                statusLabel.textContent = "Optimal Biometrics";
+                statusLabel.className = "text-lg font-bold text-primary";
+                alertBadge.textContent = "SECURE";
+                alertBadge.className = "bg-primary/10 text-primary border border-primary/20 text-[9px] font-mono px-2 py-0.5 rounded mt-1 inline-block";
+                circle.style.color = "#14b8a6";
+                explain.textContent = "All biomarkers are within safe margins. Your heart rate, sugar parameters, and blood oxygen levels are synchronized beautifully.";
+            } else if (score >= 70) {
+                statusLabel.textContent = "Elevated Biomarkers";
+                statusLabel.className = "text-lg font-bold text-yellow-400";
+                alertBadge.textContent = "WARNING ACTIVE";
+                alertBadge.className = "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 text-[9px] font-mono px-2 py-0.5 rounded mt-1 inline-block";
+                circle.style.color = "#f59e0b";
+                
+                let issues = [];
+                if (gluc > 100) issues.push("slightly high fasting glucose");
+                if (chol > 200) issues.push("borderline total cholesterol");
+                if (hba1c > 5.7) issues.push("elevated HbA1c");
+                if (hemo < 13.5) issues.push("lower hemoglobin levels");
+                
+                explain.textContent = `Warning: We detected ${issues.join(" and ")}. The Digital Health Twin suggests scheduling a consulting call to audit diet protocols.`;
+            } else {
+                statusLabel.textContent = "Critical Risk Alert";
+                statusLabel.className = "text-lg font-bold text-accentRed";
+                alertBadge.textContent = "HIGH ALERT ROUTING";
+                alertBadge.className = "bg-accentRed/10 text-accentRed border border-accentRed/20 text-[9px] font-mono px-2 py-0.5 rounded mt-1 inline-block animate-pulse";
+                circle.style.color = "#ef4444";
+
+                explain.textContent = "CRITICAL: Glucose and HbA1c levels have crossed clinical diabetic thresholds. Localized organ risk maps highlight Kidney and Heart stress markers. Alert routed to primary contacts.";
+            }
+        }
+
+        // Run initial simulation calibration
+        updateSimulation();
+    </script>
+
+</body>
+</html>
